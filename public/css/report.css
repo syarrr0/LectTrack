@@ -1,0 +1,233 @@
+/* report.css */
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #224568cc; /* Lighter background */
+    color: #1e293b;
+}
+
+/* --- HEADER --- */
+.header {
+    background: #ffffff;
+    padding: 18px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08); /* Stronger shadow */
+    border-bottom: 3px solid #2563eb; /* Blue bottom line */
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 24px; /* Larger */
+    font-weight: 800; /* Bolder */
+    margin-left: 10px;
+    color: #1e293b;
+}
+
+.header-icon {
+    color: #2563eb;
+    font-size: 20px;
+}
+
+/* BAHAGIAN BARU UNTUK KANAN HEADER */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Jarak antara butang dan datetime */
+}
+
+.back-home-btn {
+    text-decoration: none;
+    background-color: #f1f5f9; /* Light background */
+    color: #2563eb; /* Blue text */
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+    border: 1px solid #e5e7eb;
+}
+
+.back-home-btn:hover {
+    background-color: #2563eb; /* Blue background on hover */
+    color: #ffffff; /* White text on hover */
+    border-color: #2563eb;
+}
+
+.back-home-btn i {
+    margin-right: 5px;
+}
+/* AKHIR BAHAGIAN BARU */
+
+.datetime {
+    font-size: 14px;
+    color: #475569;
+    font-weight: 500;
+}
+
+/* --- CONTAINER --- */
+.container {
+    padding: 40px;
+    max-width: 1200px; /* Wider max width */
+    margin: auto;
+}
+
+/* --- SUMMARY BOXES --- */
+.summary-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Use grid for responsive layout */
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.summary-box {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
+    transition: transform 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+}
+
+.icon-wrap {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+.bg-blue { background-color: #2563eb; }
+.bg-green { background-color: #22c55e; }
+.bg-orange { background-color: #f59e0b; }
+
+.summary-box p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 4px 0;
+}
+
+.summary-box h2 {
+    margin: 0;
+    font-size: 32px; 
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.summary-box span {
+    font-size: 12px;
+    color: #94a3b8;
+    display: block;
+    margin-top: 8px;
+}
+
+/* --- CHART SECTION --- */
+.chart-section {
+    margin-bottom: 40px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.chart-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #1e293b;
+}
+
+.chart-section h3 i {
+    margin-right: 8px;
+    color: #2563eb;
+}
+
+.chart-desc {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+.chart-section canvas {
+    max-height: 300px; 
+}
+
+/* --- PIE CHARTS --- */
+.pie-section {
+    display: flex;
+    gap: 25px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.pie-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    text-align: center;
+    flex: 1; 
+    min-width: 250px;
+}
+
+.pie-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.pie-card h4 i {
+    margin-right: 8px;
+}
+
+.text-green { color: #22c55e; }
+.text-orange { color: #f59e0b; } 
+.text-red { color: #ef4444; }
+.text-blue { color: #2563eb; } 
+
+.chart-container {
+    position: relative;
+    width: 150px; 
+    height: 150px;
+    margin: 0 auto 10px auto;
+}
+
+.chart-center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+/* --- FOOTER --- */
+footer {background-color: #181b2b;
+    text-align: center;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 25px 0;
+    border-top: 1px solid #e5e7eb;
+}
