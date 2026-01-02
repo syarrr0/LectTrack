@@ -25,7 +25,7 @@ class InformationController extends Controller
     $stats = [
         'courses_held' => 5,        // Jumlah Kursus Dipegang
         'total_students' => 180,    // Jumlah Pelajar Keseluruhan
-        'office_hours' => 'Isnin & Rabu (10:00 - 12:00)', // Waktu Pejabat
+        'office_hours' => 'Monday - Friday (8:00 - 5:00)', // Waktu Pejabat
         'attendance_rate' => '95%', // Peratusan Kehadiran Tepat Masa Bulan Ini
         'office_room' => 'Blok A, Bilik 305' // Lokasi Pejabat
     ];

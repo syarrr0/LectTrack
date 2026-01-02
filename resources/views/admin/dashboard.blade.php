@@ -82,10 +82,16 @@
   </section>
 </main>
 
-<footer class="max-w-7xl mx-auto px-8 py-10 flex flex-col md:flex-row justify-between items-center border-t border-white/10 mt-10">
-    <div class="flex items-center gap-4 opacity-70">
-        <img src="{{ asset('images/logo1_white.png') }}" class="h-8 filter brightness-200">
-        <p class="text-sm font-medium text-slate-400">© 2025 LectTrack. High-Performance Management System.</p>
+<footer class="w-full bg-white/90 backdrop-blur-md mt-10">
+    <div class="max-w-7xl mx-auto px-8 py-10 flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center gap-4">
+            <img src="{{ asset('images/logo1.png') }}" class="h-8">
+            <p class="text-sm font-semibold text-slate-600">© 2025 LectTrack. High-Performance Management System.</p>
+        </div>
+        
+        <div class="text-slate-400 text-xs font-medium mt-4 md:mt-0">
+            System Version 2.0.4
+        </div>
     </div>
 </footer>
 

@@ -347,25 +347,25 @@ body {
 
     <div class="quick-info-row">
         <div class="quick-info-card">
-            <h3>Akademik</h3>
+            <h3>ACADEMIC</h3>
             <div class="stat-item">
-                <span class="stat-label">Kursus Dipegang:</span>
-                <span class="stat-value">{{ $stats['courses_held'] }}</span>
+                <span class="stat-label">Designation:</span>
+                <span class="stat-value">Head of Department</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">Jumlah Pelajar:</span>
-                <span class="stat-value">{{ $stats['total_students'] }}</span>
+                <span class="stat-label">Years of Service::</span>
+                <span class="stat-value">5 Years</span>
             </div>
         </div>
 
         <div class="quick-info-card">
-            <h3>Status Semasa</h3>
+            <h3>Current Status</h3>
             <div class="stat-item">
-                <span class="stat-label">Waktu Pejabat:</span>
+                <span class="stat-label">Duty Time:</span>
                 <span class="stat-value">{{ $stats['office_hours'] }}</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">Kehadiran Bulan Ini:</span>
+                <span class="stat-label">Monthly Attendance:</span>
                 <span class="stat-value">{{ $stats['attendance_rate'] }}</span>
             </div>
         </div>

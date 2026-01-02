@@ -273,12 +273,7 @@
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
         <div class="signature-section">
             <div class="signature-block">
                 Report Prepared By:<br>
@@ -298,10 +293,9 @@
 
     </div>
 
-    {{-- Script untuk memulakan dialog cetakan secara automatik --}}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Memberi sedikit masa kepada browser untuk memuatkan semua CSS dan imej
             setTimeout(function() {
                 window.print();
             }, 500); 
