@@ -23,7 +23,7 @@ class PasswordController extends Controller
 
 try {
  Mail::send([], [], function ($message) use ($lecturer, $otp) {
-    // Sediakan URL untuk kedua-dua logo
+
     $logoKV = asset('images/logoKV.png');
     $logo1 = asset('images/logo1.png');
     
