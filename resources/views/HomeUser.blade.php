@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-<video autoplay loop muted playsinline id="bg-video">
+{{-- <video autoplay loop muted playsinline id="bg-video">
     <source src="{{ asset('images/bgg.mp4') }}" type="video/mp4">
-</video>
+</video> --}}
 
 <header class="navbar">
    <div class="nav-left">

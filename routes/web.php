@@ -168,6 +168,9 @@ Route::post('/update-password', [PasswordController::class, 'updatePassword'])->
 
 // noti admin
 Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
+// Route untuk membolehkan HomeUser.blade.php mengambil data notifikasi
+Route::get('/api/notifications/fetch', [AdminController::class, 'fetchNotifications']);
+
 
 // Route untuk simpan maklumat (POST) - INI YANG HILANG
 Route::post('/admin/notifications/store', [AdminController::class, 'storeNotification'])->name('admin.notifications.store');
