@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-{{-- <video autoplay loop muted playsinline id="bg-video">
+<video autoplay loop muted playsinline id="bg-video">
     <source src="{{ asset('images/bgg.mp4') }}" type="video/mp4">
-</video> --}}
+</video>
 
 <header class="navbar">
    <div class="nav-left">
@@ -65,7 +65,7 @@
         <p class="notif-title">Recent Notifications</p>
         <ul class="notif-list" id="dynamicNotifList">
             </ul>
-        <a href="#" style="display:block;text-align:center;margin-top:6px;color:var(--blue);text-decoration:none;">View All</a>
+        <a href="#" style="display:block;text-align:center;margin-top:6px;color:var(--blue);text-decoration:none;">Clear All</a>
     </div>
 </div>
 
@@ -413,41 +413,88 @@ function handlePasswordRequest() {
     console.log("Menghantar borang tukar kata laluan...");
     document.getElementById('changePassForm').submit();
 }
+let isActionRunning = false; // Kunci untuk menghalang pertembungan data
 
 function loadNotifications() {
+    if (isActionRunning) return; // Jika tengah klik clear/read, jangan tarik data
+
     fetch('/api/notifications/fetch')
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             const list = document.getElementById('dynamicNotifList');
             const badge = document.getElementById('notifBadge');
-            
-            if (data.length > 0) {
-                list.innerHTML = ''; // Clear old data
-                badge.innerText = data.length;
-                badge.style.display = 'block';
 
-                data.forEach(item => {
+            // 1. Update Badge
+            if (data.unreadCount > 0) {
+                badge.innerText = data.unreadCount;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            // 2. Render List
+            list.innerHTML = '';
+            if (data.notifications.length === 0) {
+                list.innerHTML = '<li style="padding:10px; color:#888;">Tiada notifikasi</li>';
+            } else {
+                data.notifications.forEach(item => {
                     const li = document.createElement('li');
+                    li.style.opacity = item.is_read == 1 ? '0.5' : '1'; 
                     li.innerHTML = `
-                        <div style="margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                            <strong>📌 ${item.title}</strong><br>
-                            <small style="color: #888;">${item.day}, ${item.date}</small>
-                            <p style="margin: 3px 0; font-size: 13px;">${item.content}</p>
+                        <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                            <strong style="color: ${item.is_read == 1 ? '#666' : '#000'}">📌 ${item.title}</strong>
+                            <p style="font-size: 13px; margin: 5px 0;">${item.content}</p>
+                            <small style="color: #bbb;">${item.date}</small>
                         </div>
                     `;
                     list.appendChild(li);
                 });
-            } else {
-                list.innerHTML = '<li>No new notifications</li>';
             }
         });
 }
 
-// Check for new notifications every 10 seconds (Simulated Real-time)
-setInterval(loadNotifications, 10000);
+function handleBellClick() {
+    isActionRunning = true; // Kunci setInterval
+    fetch('/api/notifications/mark-read', {
+        method: 'POST',
+        headers: { 
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(() => {
+        isActionRunning = false; // Buka kunci
+        loadNotifications(); // Paksa refresh data terkini
+    })
+    .catch(() => isActionRunning = false);
+}
 
-// Initial load
+function clearAll() {
+    if(!confirm("Padam semua notifikasi?")) return;
+
+    // Sembunyikan terus secara visual supaya user nampak "instant"
+    document.getElementById('dynamicNotifList').innerHTML = '<li>Memadam...</li>';
+    document.getElementById('notifBadge').style.display = 'none';
+
+    fetch('/api/notifications/clear-all', {
+        method: 'POST',
+        headers: { 
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Berjaya padam");
+        loadNotifications(); // Tarik balik data yang dah kosong
+    })
+    .catch(err => console.error("Error:", err));
+}
+
+// Jalankan load pertama kali
 loadNotifications();
+// Jalankan setiap 10 saat
+setInterval(loadNotifications, 10000);
 </script>
 
 

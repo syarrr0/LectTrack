@@ -50,23 +50,22 @@ class AdminController extends Controller
 
 public function fetchNotifications() 
 {
-    $userId = auth()->id(); // Pastikan user dah login
+    $userId = auth()->id();
 
-    // Ambil notifikasi yang BELUM dipadam oleh user ini
     $notifications = \DB::table('site_notifications')
         ->leftJoin('user_notifications', function($join) use ($userId) {
             $join->on('site_notifications.id', '=', 'user_notifications.notification_id')
                  ->where('user_notifications.user_id', '=', $userId);
         })
+        // PENTING: Tapis supaya yang is_deleted = 1 TIDAK KELUAR
         ->where(function($query) {
-            $query->where('user_notifications.is_deleted', false)
+            $query->where('user_notifications.is_deleted', 0)
                   ->orWhereNull('user_notifications.is_deleted');
         })
         ->select('site_notifications.*', 'user_notifications.is_read')
         ->orderBy('site_notifications.created_at', 'desc')
         ->get();
 
-    // Kira badge (Hanya yang is_read = false)
     $unreadCount = $notifications->where('is_read', 0)->count();
 
     return response()->json([
@@ -76,12 +75,13 @@ public function fetchNotifications()
 }
 public function markAllAsRead() {
     $userId = auth()->id();
-    $notis = \DB::table('site_notifications')->pluck('id');
+    $notificationIds = \DB::table('site_notifications')->pluck('id');
 
-    foreach($notis as $id) {
+    foreach ($notificationIds as $id) {
+        // Gunakan updateOrInsert dengan kriteria yang tepat
         \DB::table('user_notifications')->updateOrInsert(
             ['user_id' => $userId, 'notification_id' => $id],
-            ['is_read' => true, 'updated_at' => now()]
+            ['is_read' => 1, 'updated_at' => now()] // Gunakan 1 untuk tinyint true
         );
     }
     return response()->json(['success' => true]);
@@ -89,12 +89,17 @@ public function markAllAsRead() {
 
 public function clearAllNotifications() {
     $userId = auth()->id();
-    $notis = \DB::table('site_notifications')->pluck('id');
+    // Ambil semua ID notifikasi yang wujud
+    $ids = \DB::table('site_notifications')->pluck('id');
 
-    foreach($notis as $id) {
+    foreach($ids as $id) {
         \DB::table('user_notifications')->updateOrInsert(
             ['user_id' => $userId, 'notification_id' => $id],
-            ['is_deleted' => true, 'updated_at' => now()]
+            [
+                'is_deleted' => 1, 
+                'is_read' => 1, 
+                'updated_at' => now()
+            ]
         );
     }
     return response()->json(['success' => true]);
