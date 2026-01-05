@@ -111,12 +111,8 @@ Route::get('/help', function () {
 // ADMIN
 
 // Papar page login admin
-Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])
-    ->name('admin.login');
-
-// Proses login admin
-Route::post('/admin/login', [AdminAuthController::class, 'login'])
-    ->name('admin.login.submit');
+Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
 // Dashboard admin
 Route::get('/admin/dashboard', [IndexadminController::class, 'index'])
