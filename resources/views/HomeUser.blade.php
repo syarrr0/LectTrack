@@ -77,7 +77,7 @@
 <div class="main-content">
     <img src="{{ asset('images/logoKV.png') }}" style="width:180px;">
     <h1 style="font-size:34px;font-weight:800;margin-top:20px;">WELCOME TO LECTTRACK</h1>
-    <p style="font-size:16px;color:#444;margin-top:-5px;">Lecturer attendance management system for professional institutions</p>
+    <p style="font-size:16px;color:#444;margin-top:-5px;">Lecturer Attendance Management System For Professional Institutions</p>
 
     <div class="button-group">
         <a href="{{ route('attendance.form') }}" class="button">RECORD ATTENDANCE</a>
