@@ -4,7 +4,7 @@
     @csrf
     <input type="hidden" name="token" value="{{ $token }}">
 
-    <label>New Password:</label>
+    <label>New password:</label>
     <input type="password" name="password" required>
 
     <button type="submit">Reset Password</button>
