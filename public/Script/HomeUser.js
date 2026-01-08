@@ -268,7 +268,7 @@ function loadNotifications() {
             // 2. Render List
             list.innerHTML = '';
             if (data.notifications.length === 0) {
-                list.innerHTML = '<li style="padding:10px; color:#888;">Tiada notifikasi</li>';
+                list.innerHTML = '<li style="padding:10px; color:#888;">No notifications</li>';
             } else {
                 data.notifications.forEach(item => {
                     const li = document.createElement('li');

@@ -277,7 +277,7 @@
 
             <div class="input">
                 <label>Username</label>
-                <input type="text" name="nama" autocomplete="username" required>
+                <input type="text" name="nama" autocomplete="off" required>
             </div>
 
             <div class="input">

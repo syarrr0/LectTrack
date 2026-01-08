@@ -102,7 +102,7 @@
     <div id="chat-log"></div>
 
     <div id="chat-input-box">
-        <input type="text" id="chat-input" placeholder="Tanya soalan anda..." autocomplete="off">
+        <input type="text" id="chat-input" placeholder="Ask your question..." autocomplete="off">
         <button id="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
@@ -135,9 +135,9 @@
         </div>
         <div class="footer-col">
             <h3>USEFUL LINKS</h3>
-            <a href="#">Support</a>
-            <a href="#">System Guide</a>
-            <a href="#">Account Settings</a>
+            <a href="https://www.moe.gov.my/">Kementerian Pendidikan Malaysia (KPM)</a>
+            <a href="https://www.mbot.org.my/"> Malaysia Board of Technologists</a>
+            <a href="https://sites.google.com/view/portalkvbalikpulau/">KVBP Portal</a>
             <a href="#">Help Center</a>
         </div>
         <div class="footer-col">
