@@ -122,7 +122,7 @@
                  class="login-logo">
 
             <h2 class="text-3xl font-extrabold text-gray-800">
-                Administrator Login
+                Admin Login
             </h2>
             <p class="text-sm text-gray-500 mt-1">
                 Access the LectTrack management console
