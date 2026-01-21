@@ -21,8 +21,20 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;     /* Bagi video cover seluruh skrin */
-    z-index: -1;           /* Letak video di belakang content */
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Tambah bahagian ini untuk filter putih */
+.bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.712); /* 0.4 adalah tahap kepekatan putih (0.0 - 1.0) */
+    z-index: -1; /* Duduk di atas video tapi di bawah content */
+    pointer-events: none; /* Supaya tidak menghalang klik pada butang */
 }
 
 /* NAVBAR: single, clean definition */
@@ -141,51 +153,141 @@ body {
 .notif-list li { background:#f7f7f7; padding:8px; border-radius:6px; margin-bottom:8px; }
 
 /* MAIN CONTENT + FOOTER (kept as original) */
+:root {
+    --navy-blue: #1e3a8a; /* Biru Tua Profesional */
+    --light-gray: #f8fafc;
+    --text-dark: #1f2937;
+}
+
 .main-content {
-    margin-top: 150px;
-    width:92%;
-    max-width:900px;
-    padding:50px 30px;
-    text-align:center;
-    margin-left:auto;
-    margin-right:auto;
-
-    background: rgba(255,255,255,0.4);
-    backdrop-filter: blur(4px);
-    border-radius:20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 120px adalah jarak dari navbar atas, 80px bawah, 20px kiri kanan */
+    padding: 120px 20px 80px 20px; 
+    z-index: 1;
 }
 
-/* Buttons */
-.button-group {
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-    margin-top:40px;
+.header-intro {
+    text-align: center;
+    margin-bottom: 60px;
 }
 
-.button {
-    padding:18px;
-    border-radius:50px;
-    color:black;
-    font-weight:700;
-    font-size:16px;
-    text-decoration:none;
-    transition:0.25s;
-    background: rgba(28, 73, 210, 0.46);     /* BIRU TRANSPARENT */
-    border: 2px solid rgba(28, 73, 210, 0.6); /* BORDER BIRU LEMBUT */
-    backdrop-filter: blur(3px); 
+.main-logo-kv {
+    width: 250px; /* Saiz logo dibesarkan (asal 170px) */
+    height: auto;
+    margin-bottom: 40px; /* Jarak antara logo dengan tulisan WELCOME */
+    /* Opsyenal: Tambah bayang lembut pada logo supaya lebih menonjol */
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1)); 
 }
 
-/* .button-group a:nth-child(1) { background: var(--blue); }
-.button-group a:nth-child(2) { background: var(--blue);  }
-.button-group a:nth-child(3) { background: var(--blue); } */
+.main-title {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: 1px;
+}
 
-.button:hover {
-     transform: translateY(-4px);
-    background: rgba(28, 73, 210, 1);     /* LEBIH SOLID BILA HOVER */
+.sub-title {
+    font-size: 16px;
+    color: #64748b;
+    margin-top: 5px;
+}
+
+/* Grid System */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* Card Styling */
+.menu-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Effect */
+.menu-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--navy-blue);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon Styling - SEMUA BIRU TUA */
+.icon-box {
+    width: 80px;
+    height: 80px;
+    background: #eff6ff; /* Biru sangat cair untuk background icon */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    font-size: 32px;
+    color: var(--navy-blue); /* Ikon Biru Tua */
+    transition: all 0.3s ease;
+}
+
+.menu-card:hover .icon-box {
+    background: var(--navy-blue);
     color: white;
-    border-color: rgba(28, 74, 210, 0.80);
-    box-shadow: 0 10px 25px rgba(30, 99, 233, 0.35);
+}
+
+.menu-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.menu-card p {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Footer Card */
+.card-footer {
+    margin-top: auto;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.8;
+}
+
+.menu-card:hover .card-footer {
+    opacity: 1;
+    gap: 15px; /* Efek anak panah bergerak sedikit */
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* FOOTER WRAPPER */

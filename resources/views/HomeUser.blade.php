@@ -10,10 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<video autoplay loop muted playsinline id="bg-video" poster="{{ asset('images/biru.jpeg') }}">
+<video autoplay loop muted playsinline id="bg-video">
     <source src="{{ asset('images/bgg.mp4') }}" type="video/mp4">
 </video>
-
+<div class="bg-overlay"></div>
 <header class="navbar">
    <div class="nav-left">
     <div class="logo">
@@ -75,14 +75,39 @@
 </header>
 
 <div class="main-content">
-    <img src="{{ asset('images/logoKV.png') }}" style="width:180px;">
-    <h1 style="font-size:34px;font-weight:800;margin-top:20px;">WELCOME TO LECTTRACK</h1>
-    <p style="font-size:16px;color:#444;margin-top:-5px;">Lecturer Attendance Management System For Professional Institutions</p>
+    <div class="header-intro">
+        <img src="{{ asset('images/logoKV.png') }}" class="main-logo-kv">
+        <h1>WELCOME TO LECTTRACK</h1>
+        <p>Lecturer Attendance Management System For Professional Institutions</p>
+    </div>
 
-    <div class="button-group">
-        <a href="{{ route('attendance.form') }}" class="button">RECORD ATTENDANCE</a>
-        <a href="{{ route('attendance.history', $lecturerID) }}" class="button">HISTORY ATTENDANCE</a>
-        <a href="{{ route('lecturer.information') }}" class="button">VIEW INFORMATION</a>
+    <div class="dashboard-grid">
+        <a href="{{ route('attendance.form') }}" class="menu-card">
+            <div class="icon-box bg-blue">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3>Record Attendance</h3>
+            <p>Submit your daily attendance quickly and easily.</p>
+            <span class="btn-action">Record Now <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a href="{{ route('attendance.history', $lecturerID) }}" class="menu-card">
+            <div class="icon-box bg-green">
+                <i class="fas fa-history"></i>
+            </div>
+            <h3>History Attendance</h3>
+            <p>View and track all your previous attendance records.</p>
+            <span class="btn-action">View History <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a href="{{ route('lecturer.information') }}" class="menu-card">
+            <div class="icon-box bg-purple">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>View Information</h3>
+            <p>Check and update your personal profile details.</p>
+            <span class="btn-action">View Profile <i class="fas fa-arrow-right"></i></span>
+        </a>
     </div>
 </div>
 <!-- BAHAGIAN AI -->

@@ -324,7 +324,9 @@ function clearAll() {
     .catch(err => console.error("Error:", err));
 }
 
+
 // Jalankan load pertama kali
 loadNotifications();
-// Jalankan setiap 10 saat
-setInterval(loadNotifications, 100);
+
+// Jalankan setiap 30 saat (30000ms) - Jangan letak 100!
+setInterval(loadNotifications, 30000);

@@ -115,8 +115,8 @@ Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('adm
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
 // Dashboard admin
-Route::get('/admin/dashboard', [IndexadminController::class, 'index'])
-    ->name('admin.dashboard');
+// Route::get('/admin/dashboard', [IndexadminController::class, 'index'])
+//     ->name('admin.dashboard');
 
 // Admin index (senarai lecturer)
 Route::prefix('admin')->name('admin.')->group(function () {
