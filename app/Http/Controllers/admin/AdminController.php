@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\Models\Lecturer;
 use App\Models\SiteNotification;
 use Illuminate\Http\Request; // <--- WAJIB ADA BARIS INI
 
 class AdminController extends Controller
 {
+
     public function index()
     {
         $lecturers = Lecturer::orderBy('nama')->get();

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LectTrack | Lecturer List</title>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -267,6 +267,22 @@
             display: none;
             font-style: italic;
         }
+        /* Warna Merah untuk Delete */
+.action-button.delete {
+    background: #dc3545; /* Warna merah amaran */
+}
+
+.action-button.delete:hover {
+    background: #bb2d3b;
+    transform: translateY(-1px);
+}
+
+/* Pastikan button tidak ada border default */
+button.action-button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
     </style>
 </head>
 <body>
@@ -344,6 +360,14 @@
                             <a href="{{ url('/lecturer/print/' . $lecturer->id) }}" target="_blank" class="action-button print">
                                 <i class="fas fa-print"></i> Print
                             </a>
+                            <button type="button" class="action-button delete" onclick="confirmDelete({{ $lecturer->id }})">
+    <i class="fas fa-trash"></i> Delete
+</button>
+
+<form action="{{ url('/lecturer/delete/' . $lecturer->id) }}" method="POST" id="delete-form-{{ $lecturer->id }}" style="display:none;">
+    @csrf
+    @method('DELETE')
+</form>
                         </div>
                     </div>
                 </td>
@@ -391,8 +415,35 @@ document.addEventListener("DOMContentLoaded", () => {
         counter.textContent = visibleCount;
         noData.style.display = visibleCount === 0 ? "block" : "none";
     });
+
 });
-// Fungsi toggleMenu dan event listener click kini tidak diperlukan kerana dropdown telah dibuang.
+
+function confirmDelete(id) {
+    Swal.fire({
+        title: 'Are You Sure?',
+        text: "This lecturer's data will be permanently deleted!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545', // Warna merah untuk delete
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, Delete!',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    })
+}
+@if(session('success'))
+    Swal.fire({
+        title: 'Successful!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        timer: 3000,
+        showConfirmButton: false
+    });
+@endif
 </script>
 
 </body>

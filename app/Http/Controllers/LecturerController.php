@@ -290,5 +290,15 @@ private function sendEmail($to, $subject, $html)
 
         return view('admin.lecturer.report', compact('lecturer', 'attendances'));
     }
+public function destroy($id)
+    {
+        // Padam data dari table lecturers berdasarkan ID
+        $deleted = \DB::table('lecturers')->where('id', $id)->delete();
 
+        if ($deleted) {
+            return redirect()->back()->with('success', 'Lecturer deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete data.');
+        }
+    }
 }

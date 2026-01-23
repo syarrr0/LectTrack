@@ -9,17 +9,34 @@ use App\Http\Controllers\Controller;
 
 class IndexadminController extends Controller
 {
-    public function index()
+   public function index()
     {
-        
-        $inCollege = Attendance::where('selection', 'PROGRAM')->count();
+        // 1. Dapatkan tarikh hari ini
+        $today = Carbon::today();
 
-       
-        $sickLeave = Attendance::where('selection', 'CUTI')->count();
+        // 2. Kira jumlah keseluruhan pensyarah dalam database
+        $totalLecturers = Lecturer::count();
 
-        $outsideDuty = Attendance::whereIn('selection', ['KURSUS', 'BENGKEL'])->count();
+        // 3. Kira yang Cuti (On Leave) hari ini
+        $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
+                                ->whereDate('date_end', '>=', $today)
+                                ->where('selection', 'CUTI')
+                                ->count();
 
-        return view('admin.Dashboard', compact('inCollege', 'sickLeave', 'outsideDuty'));
+        // 4. Kira yang Tugasan Luar (Outside Duty) hari ini
+        // Mengikut data 3.sql, selection yang terlibat adalah KURSUS/BENGKEL
+        $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
+                                  ->whereDate('date_end', '>=', $today)
+                                  ->whereIn('selection', ['KURSUS', 'BENGKEL', 'KURSUS/BENGKEL'])
+                                  ->count();
+
+        // 5. LOGIK UTAMA: Total - (Cuti + Luar) = In College
+        $inCollege = $totalLecturers - ($sickLeave + $outsideDuty);
+
+        // Pastikan nilai tidak negatif
+        $inCollege = $inCollege < 0 ? 0 : $inCollege;
+
+        return view('admin.Dashboard', compact('inCollege', 'sickLeave', 'outsideDuty', 'totalLecturers'));
     }
     
 }

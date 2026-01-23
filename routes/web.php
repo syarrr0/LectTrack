@@ -171,3 +171,5 @@ Route::post('/api/notifications/clear-all', [AdminController::class, 'clearAllNo
 
 // Route untuk simpan maklumat (POST) - INI YANG HILANG
 Route::post('/admin/notifications/store', [AdminController::class, 'storeNotification'])->name('admin.notifications.store');
+
+Route::delete('/lecturer/delete/{id}', [LecturerController::class, 'destroy']);

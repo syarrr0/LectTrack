@@ -142,4 +142,5 @@ class AdminDashboardController extends Controller
             'leavePercent'
         ));
     }
+   
 }
