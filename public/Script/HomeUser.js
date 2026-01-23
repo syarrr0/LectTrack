@@ -303,25 +303,62 @@ function handleBellClick() {
 }
 
 function clearAll() {
-    if(!confirm("Padam semua notifikasi?")) return;
+    // 1. Confirm the action
+    Swal.fire({
+        title: 'Clear All Notifications?',
+        text: "This will remove these notifications. This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete for all!',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            // 2. Immediate UI feedback
+            const list = document.getElementById('dynamicNotifList');
+            const badge = document.getElementById('notifBadge');
+            
+            if (list) list.innerHTML = '<li style="text-align:center; padding:15px;">Wiping database...</li>';
 
-    // Sembunyikan terus secara visual supaya user nampak "instant"
-    document.getElementById('dynamicNotifList').innerHTML = '<li>Memadam...</li>';
-    document.getElementById('notifBadge').style.display = 'none';
+            // 3. API Request
+            fetch('/api/notifications/clear-all', {
+                method: 'POST',
+                headers: { 
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'All notifications were permanently removed from the system.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
 
-    fetch('/api/notifications/clear-all', {
-        method: 'POST',
-        headers: { 
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
+                    // 4. Reset UI Elements
+                    if (badge) badge.style.display = 'none';
+                    if (list) list.innerHTML = '<li class="no-notifications" style="text-align:center; padding:20px;">No notifications</li>';
+                    
+                    // Sync with server
+                    loadNotifications();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('System Error', 'Failed to reach the server.', 'error');
+            });
         }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("Berjaya padam");
-        loadNotifications(); // Tarik balik data yang dah kosong
-    })
-    .catch(err => console.error("Error:", err));
+    });
 }
 
 

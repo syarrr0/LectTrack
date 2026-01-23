@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>LectTrack - Home</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="{{ asset('css/homeuser.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -65,7 +66,7 @@
         <p class="notif-title">Recent Notifications</p>
         <ul class="notif-list" id="dynamicNotifList">
             </ul>
-        <a href="#" style="display:block;text-align:center;margin-top:6px;color:var(--blue);text-decoration:none;">Clear All</a>
+        <a href="javascript:void(0);" onclick="clearAll()" style="display:block;text-align:center;margin-top:6px;color:var(--blue);text-decoration:none;font-weight:600;">Clear All</a>
     </div>
 </div>
 

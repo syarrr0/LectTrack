@@ -90,20 +90,22 @@ public function markAllAsRead() {
 }
 
 public function clearAllNotifications() {
-    $userId = auth()->id();
-    // Ambil semua ID notifikasi yang wujud
-    $ids = \DB::table('site_notifications')->pluck('id');
+    try {
+        // 1. Permanently delete all user-specific status (read/delete flags)
+        \DB::table('user_notifications')->delete();
 
-    foreach($ids as $id) {
-        \DB::table('user_notifications')->updateOrInsert(
-            ['user_id' => $userId, 'notification_id' => $id],
-            [
-                'is_deleted' => 1, 
-                'is_read' => 1, 
-                'updated_at' => now()
-            ]
-        );
+        // 2. Permanently delete the actual notifications for everyone
+        \DB::table('site_notifications')->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All notifications have been deleted globally.'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'System Error: ' . $e->getMessage()
+        ], 500);
     }
-    return response()->json(['success' => true]);
 }
 }

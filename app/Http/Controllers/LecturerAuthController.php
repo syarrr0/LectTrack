@@ -68,4 +68,15 @@ class LecturerAuthController extends Controller
         $request->session()->flush();
         return redirect()->route('lecturer.login');
     }
+    public function destroy($id)
+    {
+        // Padam data dari table lecturers berdasarkan ID
+        $deleted = \DB::table('lecturers')->where('id', $id)->delete();
+
+        if ($deleted) {
+            return redirect()->back()->with('success', 'Pensyarah berjaya dipadam.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal memadam data.');
+        }
+    }
 }
