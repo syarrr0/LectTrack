@@ -3,514 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Form</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>LectTrack | FORM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-            "Helvetica Neue", Helvetica, Arial, sans-serif;
+        :root {
+            --navy-deep: #001A35;
+            --navy-soft: #002B5B;
+            --light-blue-bg: #F0F7FF;
+            --accent-blue: #0070FF;
+            --white: #FFFFFF;
+            --glass-white: rgba(255, 255, 255, 0.85);
+            --border-subtle: rgba(0, 26, 53, 0.1);
+            --text-main: #001A35;
+            --text-muted: #64748b;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-
-            background: url('{{ asset("images/bg-form.jpeg") }}') no-repeat center center fixed;
-            background-size: cover;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* HEADER BAR */
-        .header {
+        body {
+            background-color: var(--light-blue-bg);
+            /* Soft mesh background effect */
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 112, 255, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 43, 91, 0.05) 0px, transparent 50%);
+            min-height: 100vh;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- MODERN NAVY HEADER --- */
+        .navbar {
+            width: 100%;
+            height: 80px;
+            background: var(--navy-deep);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8%;
             position: fixed;
             top: 0;
-            width: 100%;
-            height: 70px;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(6px);
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            padding: 0 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            z-index: 999;
+            gap: 10px;
         }
 
-        .header-title {
-             font-family:'Poppins', sans-serif;
-            margin-left:18px;
-            flex-grow: 1;
-            color: #111;
-            font-size: 26px;
-            font-weight: 800;
-             text-decoration: none;
-    cursor: pointer;
-    
+        .back-link:hover {
+            background: var(--white);
+            color: var(--navy-deep);
+            transform: translateY(-2px);
         }
 
-        /* BACK BUTTON */
-        .back-btn {
-            padding: 10px 18px;
-            background: #1A73FF;
-            color: white;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            transition: 0.25s;
-        }
-
-        .back-btn:hover {
-            background: #0f5bd7;
-        }
-
-        /* MAIN PAGE */
-        .page-wrapper {
-            width: 90%;
-            max-width: 1200px;
-            margin-top: 120px;
-            background: #ffffff;
-            border-radius: 22px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+        /* --- MAIN CONTENT AREA --- */
+        .wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 130px;
+            padding: 0 20px 60px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            overflow: hidden;
+            grid-template-columns: 0.7fr 1.3fr;
+            gap: 60px;
+            align-items: start;
         }
 
-        .left-panel {
-            padding: 60px 50px;
-            background: #3f75e78a;
-        }
-
-        .left-panel img {
-            width: 200px;
-            margin-bottom: 25px;
-        }
-
-        .left-title-small {
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 2px;
-            color: #000000ff;
-            font-weight: 600;
-        }
-
-        .left-title-big {
-            font-size: 32px;
+        /* INFO PANEL */
+        .hero-section h1 {
+            font-size: 48px;
             font-weight: 800;
-            margin: 10px 0 25px 0;
-            color: #111;
-            line-height: 1.2;
-            max-width: 300px;
+            line-height: 1.1;
+            color: var(--navy-deep);
+            margin-bottom: 24px;
+            letter-spacing: -1px;
         }
 
-        .left-desc {
-            color: #000000ff;
-            font-size: 15px;
-            max-width: 300px;
+        .hero-section p {
+            color: var(--text-muted);
+            font-size: 17px;
             line-height: 1.6;
             margin-bottom: 40px;
         }
 
-        .contact-box {
-            margin-top: 40px;
+        .support-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 15px 35px rgba(0, 26, 53, 0.03);
         }
 
-        .contact-title {
-            font-size: 14px;
-            color: #000000ff;
-            font-weight: 600;
-            margin-bottom: 18px;
-        }
-
-        .contact-item {
+        .support-item {
             display: flex;
-            gap: 14px;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 20px;
         }
 
-        .contact-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            background: #3131314b;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-        }
+        .support-item:last-child { margin-bottom: 0; }
 
-        .contact-label {
-            color: #000000ff;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .contact-value {
-            font-size: 15px;
-            font-weight: 600;
-            color: #222;
-        }
-
-        /* RIGHT PANEL */
-        .right-panel {
-            padding: 50px 55px;
-            background: white;
-            min-height: 80px;
-            
-        }
-
-        h2 {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 25px;
-        }
-
-        .datetime-box {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .datetime-date {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .datetime-time {
-            font-size: 34px;
-            font-weight: 700;
-            margin-top: 6px;
-        }
-
-        /* ALL INPUTS TURUN KE BAWAH */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 22px;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            padding: 14px;
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            background: var(--light-blue-bg);
+            color: var(--accent-blue);
             border-radius: 12px;
-            border: 1px solid #d0d0d0;
-            background: #fafafa;
-            font-size: 15px;
-        }
-
-        .input-group label {
-            position: absolute;
-            top: 13px;
-            left: 14px;
-            font-size: 15px;
-            color: #777;
-            pointer-events: none;
-            transition: 0.25s;
-            background: white;
-        }
-
-        .input-group input:focus + label,
-        .input-group input:not(:placeholder-shown) + label,
-        .input-group select:focus + label,
-        .input-group select:not([value=""]) + label,
-        .input-group select:valid + label {
-            top: -9px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #6C63FF;
-            padding: 0 4px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 14px;
-            border: none;
-            background: #6C63FF;
-            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 18px;
-            margin-top: 30px;
+        }
+
+        .support-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .support-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy-deep);
+        }
+
+        /* ATTENDANCE FORM CARD */
+        .form-card {
+            background: var(--white);
+            padding: 50px;
+            border-radius: 35px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 40px 80px rgba(0, 26, 53, 0.06);
+        }
+
+        .form-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-title::before {
+            content: '';
+            width: 5px;
+            height: 25px;
+            background: var(--accent-blue);
+            border-radius: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .input-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-stack label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy-deep);
+            padding-left: 4px;
+        }
+
+        .input-stack input, .input-stack select {
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1.5px solid #E2E8F0;
+            background: #F8FAFC;
+            font-size: 15px;
+            transition: 0.3s;
+            color: var(--text-main);
+            width: 100%;
+        }
+
+        .input-stack input:focus, .input-stack select:focus {
+            border-color: var(--accent-blue);
+            background: var(--white);
+            outline: none;
+            box-shadow: 0 0 0 5px rgba(0, 112, 255, 0.1);
+        }
+
+        .dual-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* --- GLASS BUTTON --- */
+        .btn-submit {
+            background: var(--navy-deep);
+            color: var(--white);
+            border: none;
+            padding: 20px;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 15px;
+            box-shadow: 0 10px 25px rgba(0, 26, 53, 0.2);
+            width: 100%;
         }
 
-        @media(max-width: 900px) {
-            .page-wrapper {
-                grid-template-columns: 1fr;
-            }
-            .left-panel {
-                text-align: center;
-            }
+        .btn-submit:hover {
+            background: var(--navy-soft);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 35px rgba(0, 26, 53, 0.25);
         }
 
-        @media(max-width: 650px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* POPUP */
-        .popup-overlay {
+        /* --- OVERLAYS --- */
+        .overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.55);
+            background: rgba(0, 26, 53, 0.4);
+            backdrop-filter: blur(10px);
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 200;
+            z-index: 2000;
+            padding: 20px;
         }
 
-        .popup-box {
-            background: white;
-            width: 90%;
+        .modal-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 30px;
             max-width: 450px;
-            border-radius: 12px;
-            padding: 25px;
-            animation: pop 0.2s ease-out;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 40px 70px rgba(0,0,0,0.15);
         }
 
-        @keyframes pop {
-            from { transform: scale(0.85); opacity: 0; }
-            to   { transform: scale(1); opacity: 1; }
+        .loader-ring {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #F1F5F9;
+            border-top: 4px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+            margin: 0 auto 20px;
         }
 
-        .popup-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 20px;
-        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .btn-cancel {
-            padding: 10px 20px;
-            background: #ccc;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-confirm {
-            padding: 10px 20px;
-            background: #6C63FF;
-            color: white;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
+        /* Responsive */
+        @media (max-width: 950px) {
+            .wrapper { grid-template-columns: 1fr; margin-top: 100px; }
+            .hero-section { text-align: center; }
+            .support-item { justify-content: center; }
+            .form-card { padding: 35px; }
         }
     </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<div class="header">
-     <a href="{{ route('lecturer.dashboard') }}" class="header-title">LECTTRACK</a>
-    <a href="{{ route('lecturer.dashboard') }}" class="back-btn">← Back</a>
-</div>
+<nav class="navbar">
+    <div class="logo">LectTrack.</div>
+    <a href="{{ route('lecturer.dashboard') }}" class="back-link">
+        <i class="fas fa-chevron-left"></i> BACK TO HOME
+    </a>
+</nav>
 
-<div class="page-wrapper">
-
-    <!-- LEFT PANEL -->
-    <div class="left-panel">
-
-        <img src="{{ asset('images/logoKV.png') }}">
-        <img src="{{ asset('images/logo1.png') }}">
-
-        <div class="left-title-small">We're here to help you</div>
-
-        <div class="left-title-big">
-            Record Your Attendance Easily
-        </div>
-
-        <p class="left-desc">
-            Fill in the details on the right. Ensure all information is accurate before submitting.
-        </p>
-
-        <div class="contact-box">
-            <div class="contact-title">If there are any problems filling in or if it fails, please contact:</div>
-
-            <div class="contact-item">
-                <div class="contact-icon">✉️</div>
+<div class="wrapper">
+    <section class="hero-section">
+        <h1>Record Your Attendance</h1>
+        <p>A smart, efficient, and professional way to manage your daily academic activities.</p>
+        
+        <div class="support-card">
+            <div class="support-item">
+                <div class="icon-box"><i class="fas fa-envelope"></i></div>
                 <div>
-                    <div class="contact-label">E-mail</div>
-                    <div class="contact-value">lecttrack@kvbp.edu.my</div>
+                    <div class="support-label">Support Email</div>
+                    <div class="support-value">lecttrack@kvbp.edu.my</div>
                 </div>
             </div>
-
-            <div class="contact-item">
-                <div class="contact-icon">📞</div>
+            <div class="support-item">
+                <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
                 <div>
-                    <div class="contact-label">Phone number</div>
-                    <div class="contact-value">+019 444 5608</div>
+                    <div class="support-label">Direct Line</div>
+                    <div class="support-value">+019 444 5608</div>
                 </div>
             </div>
         </div>
+    </section>
 
-    </div>
-
-    <!-- RIGHT PANEL -->
-    <div class="right-panel">
-
-        <h2>Record Attendance</h2>
-
-        <div class="datetime-box">
-            <div id="liveDate" class="datetime-date"></div>
-            <div id="liveTime" class="datetime-time"></div>
-        </div>
-
+    <div class="form-card">
+        <div class="form-title">ATTENDANCE DETAILS</div>
         <form id="attendanceForm">
             @csrf
             <input type="hidden" name="lecturer_id" value="{{ session('lecturer_id') }}">
 
-            <div class="grid">
-
-                <div class="input-group">
+            <div class="form-grid">
+                <div class="input-stack">
+                    <label>Pilihan Tujuan</label>
                     <select name="selection" id="selection" required>
-                        <option value="" disabled selected></option>
+                        <option value="" disabled selected>Select category...</option>
                         <option value="CUTI(MC)">CUTI (MC)</option>
                         <option value="KURSUS/BENGKEL">KURSUS/BENGKEL</option>
                         <option value="MESYUARAT">MESYUARAT</option>
                         <option value="OTHERS">OTHERS</option>
                     </select>
-                    <label>Pilihan Tujuan</label>
                 </div>
 
-                <div class="input-group">
-                    <input type="date" name="date_submit" id="date_submit" required>
-                    <label>Tarikh Mula</label>
+                <div class="dual-columns">
+                    <div class="input-stack">
+                        <label>Tarikh Mula</label>
+                        <input type="date" name="date_submit" id="date_submit" required>
+                    </div>
+                    <div class="input-stack">
+                        <label>Tarikh Tamat</label>
+                        <input type="date" name="date_end" id="date_end" required>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <input type="date" name="date_end" id="date_end" required>
-                    <label>Tarikh Tamat</label>
+                <div class="dual-columns">
+                    <div class="input-stack">
+                        <label>Waktu Mula</label>
+                        <input type="time" name="time" id="time" required>
+                    </div>
+                    <div class="input-stack">
+                        <label>Waktu Tamat</label>
+                        <input type="time" name="time_out" id="time_out" required>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <input type="time" name="time" id="time" required>
-                    <label>Waktu Mula</label>
-                </div>
-
-                <div class="input-group">
-                    <input type="time" name="time_out" id="time_out" required>
-                    <label>Waktu Tamat</label>
-                </div>
-
-                <div class="input-group">
-                    <input type="text" name="location" id="tempat" required>
+                <div class="input-stack">
                     <label>Lokasi</label>
+                    <input type="text" name="location" id="tempat" placeholder="Enter venue name" required>
                 </div>
 
-                <div class="input-group">
-                    <input type="text" name="remarks" id="remarks" required>
+                <div class="input-stack">
                     <label>Remarks (Nama Aktiviti)</label>
+                    <input type="text" name="remarks" id="remarks" placeholder="Provide activity details" required>
                 </div>
 
+                <button type="button" class="btn-submit" onclick="requestConfirmation()">
+                    SUBMIT FORM
+                </button>
             </div>
-
-            <button type="button" class="submit-btn" onclick="openPopup()">Submit Attendance</button>
         </form>
-
     </div>
-
 </div>
 
-<!-- POPUP -->
-<div class="popup-overlay" id="popup">
-    <div class="popup-box">
-        <h3>Confirm Your Attendance</h3>
-        <div id="popupContent"></div>
-
-        <div class="popup-buttons">
-            <button class="btn-cancel" onclick="closePopup()">Cancel</button>
-            <button class="btn-confirm" onclick="submitForm()">Confirm</button>
+<div class="overlay" id="confirmOverlay">
+    <div class="modal-box">
+        <i class="fas fa-clipboard-check" style="font-size: 40px; color: var(--accent-blue); margin-bottom: 20px;"></i>
+        <h3 style="margin-bottom: 10px;">Confirm Submission?</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">Please ensure all date and time entries are accurate before proceeding.</p>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn-submit" style="background:#F1F5F9; color:var(--navy-deep); box-shadow:none;" onclick="hideUI('confirmOverlay')">CANCEL</button>
+            <button class="btn-submit" onclick="executeSubmission()">CONFIRM & SEND</button>
         </div>
     </div>
 </div>
 
-<!-- SUCCESS POPUP -->
-<div class="popup-overlay" id="successPopup">
-    <div class="popup-box">
-        <h3 style="text-align:center;">Attendance Submitted</h3>
-        <p style="text-align:center;">Your attendance has been recorded successfully.</p>
+<div class="overlay" id="loadingOverlay">
+    <div style="text-align: center;">
+        <div class="loader-ring"></div>
+        <p style="color: white; font-weight: 600; letter-spacing: 2px;">SYNCING DATA...</p>
+    </div>
+</div>
 
-        <div style="text-align:center;">
-            <button onclick="closeSuccessPopup()" class="btn-confirm">OK</button>
+<div class="overlay" id="successOverlay">
+    <div class="modal-box">
+        <div style="width:70px; height:70px; background:#DCFCE7; color:#15803D; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:28px;">
+            <i class="fas fa-check"></i>
         </div>
+        <h3 style="margin-bottom: 8px;">Successfully Recorded!</h3>
+        <p style="color: var(--text-muted); margin-bottom: 25px;">Your attendance has been securely saved to the LectTrack system.</p>
+        <button class="btn-submit" onclick="redirectHome()">RETURN TO DASHBOARD</button>
     </div>
 </div>
 
 <script>
-    function loadDateTime() {
-        const now = new Date();
-
-        const dateOptions = {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        };
-
-        document.getElementById("liveDate").textContent =
-            now.toLocaleDateString('en-GB', dateOptions);
-
-        let h = now.getHours();
-        let m = String(now.getMinutes()).padStart(2, "0");
-        let ampm = h >= 12 ? "PM" : "AM";
-        let displayH = h % 12 || 12;
-
-        document.getElementById("liveTime").textContent =
-            `${displayH}:${m} ${ampm}`;
-    }
-
-    loadDateTime();
-    setInterval(loadDateTime, 1000);
-
-    function openPopup() {
+    function requestConfirmation() {
         const form = document.getElementById('attendanceForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-
-        let details = `
-            <p><strong>Lecturer ID:</strong> {{ session('lecturer_id') }}</p>
-            <p><strong>Pilihan:</strong> ${selection.value}</p>
-            <p><strong>Tarikh Mula:</strong> ${date_submit.value}</p>
-            <p><strong>Tarikh Tamat:</strong> ${date_end.value}</p>
-            <p><strong>Waktu Masuk:</strong> ${time.value}</p>
-            <p><strong>Waktu Keluar:</strong> ${time_out.value}</p>
-            <p><strong>Lokasi:</strong> ${tempat.value}</p>
-            <p><strong>Remarks:</strong> ${remarks.value}</p>
-        `;
-
-        document.getElementById("popupContent").innerHTML = details;
-        document.getElementById("popup").style.display = "flex";
+        if(!form.checkValidity()){ form.reportValidity(); return; }
+        document.getElementById('confirmOverlay').style.display = 'flex';
     }
 
-    function closePopup() {
-        document.getElementById("popup").style.display = "none";
+    function hideUI(id) {
+        document.getElementById(id).style.display = 'none';
     }
 
-    function submitForm() {
-        document.getElementById("popup").style.display = "none";
+    function executeSubmission() {
+        hideUI('confirmOverlay');
+        document.getElementById('loadingOverlay').style.display = 'flex';
 
         let formData = new FormData(document.getElementById("attendanceForm"));
 
-        fetch("{{ route('attendance.submit') }}", {
-            method: "POST",
-            body: formData
-        })
-            .then(res => showSuccessPopup())
-            .catch(err => alert("Submission failed."));
+        // Intentional delay for professional feel (1.5s)
+        setTimeout(() => {
+            fetch("{{ route('attendance.submit') }}", {
+                method: "POST",
+                body: formData
+            })
+            .then(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('successOverlay').style.display = 'flex';
+            })
+            .catch(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                alert("Network error. Please try again.");
+            });
+        }, 1500);
     }
 
-    function showSuccessPopup() {
-        document.getElementById("successPopup").style.display = "flex";
-    }
-
-    function closeSuccessPopup() {
-        document.getElementById("successPopup").style.display = "none";
+    function redirectHome() {
         window.location.href = "{{ route('lecturer.dashboard') }}";
     }
 </script>

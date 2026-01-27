@@ -1,447 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lecturer Information</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LectTrack | Lecturer Information </title>
 
-<style>
-:root {
-    --primary: #0A84FF;       /* iOS blue */
-    --bg-light: #F5F6F8;      
-    --text-dark: #1b1b1b;
-    --text-silver: #8c8c8c;
-    --radius-big: 24px;
-    --radius-small: 14px;
-    --shadow-soft: 0 12px 35px rgba(0, 0, 0, 0.17);
-    --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.32);
-}
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-/* GLOBAL RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    <style>
+        :root {
+            --primary: #007AFF;
+            --navy: #001A35;
+            --text-dark: #1D1D1F;
+            --text-grey: #86868B;
+            --bg-light: #F5F5F7;
+            --white: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.04);
+            --border: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-                 "Helvetica Neue", Helvetica, Arial, sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-    background: url('{{ asset('images/infobg.jpeg') }}') no-repeat center center fixed;
-    background-size: cover;
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
 
-    color: var(--text-dark);
-    min-height: 100vh;
-}
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, #e0eaff 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, #f0f4ff 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, #ffffff 0%, transparent 50%);
+            filter: blur(60px);
+        }
 
+        /* HEADER */
+        .header-bar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10%;
+            position: fixed;
+            top: 0; z-index: 1000;
+            border-bottom: var(--border);
+        }
 
-/* HEADER */
-.header-bar {
-    width: 100%;
-    background: white;
-    height: 60px;
-    box-shadow: var(--card-shadow);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 22px;
-    position: fixed;
-    top: 0;
-    z-index: 10;
-}
+        .header-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--navy);
+        }
 
-.header-title {
-    font-size: 20px;
-    font-weight: 700;
-}
+        .back-button {
+            background: var(--navy);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-/* BACK BUTTON */
-.back-button {
-    background: var(--primary);
-    color: white;
-    padding: 10px 20px;
-    border-radius: var(--radius-small);
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-}
+        /* WRAPPER */
+        .wrapper { padding: 120px 20px 60px; max-width: 1000px; margin: auto; }
 
-.back-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(10,132,255,0.3);
-}
+        /* PROFILE SECTION - FIX KEDUDUKAN BUTANG */
+        .profile-section { 
+            display: flex;           /* Guna Flexbox */
+            flex-direction: column;  /* Susun secara menegak */
+            align-items: center;     /* Letak di tengah secara mendatar */
+            text-align: center; 
+            margin-bottom: 25px; 
+        }
 
-/* MAIN CONTENT */
-.wrapper {
-    padding: 120px 20px 40px;
-    max-width: 1100px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .img-wrapper {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+            background: white;
+            border-radius: 55px;
+            box-shadow: var(--shadow-premium);
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-.blurred {
-    filter: blur(8px);
-    pointer-events: none;
-}
+        .profile-section img {
+            width: 180px; height: 180px;
+            border-radius: 45px;
+            object-fit: cover;
+            display: block;
+        }
 
-/* PROFILE PHOTO & EDIT BUTTON */
-.profile-section { /* Ganti .profile-top untuk menampung kad baru */
-    text-align: center;
-    margin-bottom: 28px;
-    width: 100%;
-    max-width: 800px; /* Lebar maksimum sama dengan kad-kad info di bawah */
-}
+        .edit-btn {
+            margin-top: 20px; /* Jarak antara gambar dan butang */
+            padding: 15px 35px;
+            background: var(--white);
+            color: var(--navy);
+            border-radius: 20px;
+            border: var(--border);
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: var(--shadow-premium);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: fit-content; /* Pastikan lebar butang ikut teks sahaja */
+        }
+        .edit-btn:hover { background: var(--navy); color: white; transform: translateY(-3px); }
 
-.profile-section img {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #dcdcdc;
-    border: 6px solid white;
-    box-shadow: var(--shadow-soft);
-}
+        /* QUICK INFO ROW */
+        .quick-info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
 
-/* EDIT BUTTON */
-.edit-btn {
-    margin-top: 18px;
-    padding: 12px 32px;
-    background: var(--primary);
-    color: white;
-    border-radius: 20px;
-    border: none;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.25s;
-}
+        .quick-info-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 35px;
+            box-shadow: var(--shadow-premium);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
 
-.edit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 18px rgba(10,132,255,0.3);
-}
+        .quick-info-card h3 {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
 
-/* ===== KAD RINGKAS (KIRI & KANAN) ===== */
-.quick-info-row {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
-    gap: 20px; /* Jarak antara kad */
-}
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+        .stat-label { font-size: 14px; font-weight: 500; color: var(--text-grey); }
+        .stat-value { font-size: 14px; font-weight: 700; color: var(--navy); }
 
-.quick-info-card {
-    background: white;
-    padding: 20px 24px;
-    border-radius: var(--radius-big);
-    box-shadow: var(--card-shadow);
-    flex: 1; /* Supaya kedua-dua kad mengambil ruang yang sama */
-    text-align: left;
-}
+        /* INFORMATION SECTIONS */
+        .info-section {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            margin-bottom: 25px;
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: var(--shadow-premium);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
 
-.quick-info-card h3 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-silver);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.stat-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-    padding: 4px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
+        .section-title::before {
+            content: ''; width: 6px; height: 24px;
+            background: var(--primary); border-radius: 10px;
+        }
 
-.stat-item:last-child {
-    border-bottom: none;
-}
+        .info-box p {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.02);
+            font-size: 15px;
+        }
 
-.stat-label {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text-dark);
-}
+        .label-text { font-weight: 700; color: var(--text-grey); width: 200px; flex-shrink: 0; }
+        .value-text { font-weight: 600; color: var(--text-dark); }
 
-.stat-value {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--primary); /* Guna warna primary untuk penekanan */
-}
-/* ===================================== */
+        /* MODAL */
+        .modal-bg {
+            position: fixed; inset: 0;
+            background: rgba(0, 26, 53, 0.15);
+            backdrop-filter: blur(20px);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
 
+        .modal-box {
+            width: 90%; max-width: 500px;
+            background: var(--white);
+            border-radius: 40px;
+            padding: 45px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.1);
+        }
 
-/* CARDS (WHITE SOLID) */
-.info-section {
-    width: 100%;
-    max-width: 800px;
-    background: white;
-    margin: 15px 0;
-    padding: 26px 28px;
-    border-radius: var(--radius-big);
-    box-shadow: var(--card-shadow);
-}
+        .modal-box input {
+            width: 100%; padding: 16px; border-radius: 18px;
+            border: 2px solid #F1F5F9; margin-top: 10px; margin-bottom: 20px;
+            font-size: 15px; background: #F8FAFC; font-weight: 600;
+        }
 
-/* SECTION TITLE */
-.section-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 12px;
-}
+        .btn-ui { flex: 1; padding: 18px; border-radius: 20px; font-weight: 800; cursor: pointer; border: none; }
+        .btn-save { background: var(--navy); color: white; }
+        .btn-cancel { background: #F1F5F9; color: var(--text-grey); }
 
-/* FIELD TEXT */
-.info-box p {
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.label {
-    font-weight: 600;
-    display: inline-block;
-    width: 150px;
-}
-
-/* FOOTER */
-.footer {
-    text-align: center;
-    margin-top: 30px;
-    color: var(--text-silver);
-    font-size: 13px;
-}
-
-/* ===== MODAL (Minimalis Style) ===== */
-
-.modal-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width:100%;
-    height:100vh;
-    background: rgba(0,0,0,0.5); /* Latar belakang gelap ringkas */
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
-    animation: fadeIn .25s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity:0; }
-    to { opacity:1; }
-}
-
-.modal-box {
-    width: 460px;
-    background: white; /* Putih solid */
-    border-radius: var(--radius-small); /* Radius yang lebih kecil */
-    padding: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Shadow yang lebih ringkas */
-    animation: pop .25s ease;
-}
-
-@keyframes pop {
-    from { transform: scale(0.95); opacity: 0; }
-    to   { transform: scale(1);   opacity: 1; }
-}
-
-.modal-title {
-    text-align:center;
-    font-size:20px;
-    font-weight:700;
-    margin-bottom:18px;
-    color: var(--text-dark);
-}
-
-/* MODAL INPUT */
-.modal-box label {
-    font-weight:600;
-    font-size:14px;
-    margin-top:10px;
-    display:block;
-    color: var(--text-dark);
-}
-
-.modal-box input {
-    width: 100%;
-    height: 40px; /* Saiz input lebih kecil */
-    padding: 8px 12px;
-    border-radius: var(--radius-small);
-    border: 1px solid #dcdcdc;
-    margin-bottom: 12px;
-    font-size: 15px;
-    background: #fff;
-    transition: 0.25s;
-    font-family: inherit;
-}
-
-.modal-box input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 1px var(--primary);
-}
-
-/* MODAL BUTTONS */
-.modal-actions {
-    display:flex;
-    justify-content:flex-end; /* Butang ke kanan */
-    margin-top:20px;
-    gap: 10px;
-}
-
-.btn {
-    padding: 10px 20px;
-    border:none;
-    border-radius:var(--radius-small);
-    font-weight:600;
-    cursor:pointer;
-    transition:0.25s;
-}
-
-/* SAVE */
-.btn-save {
-    background: var(--primary);
-    color:white;
-}
-
-.btn-save:hover {
-    opacity: 0.9;
-}
-
-/* CANCEL */
-.btn-cancel {
-    background:transparent;
-    color: var(--text-silver);
-}
-
-.btn-cancel:hover {
-    color: var(--text-dark);
-}
-</style>
+        @media (max-width: 768px) {
+            .quick-info-row { grid-template-columns: 1fr; }
+            .label-text { width: 130px; font-size: 13px; }
+            .header-bar { padding: 0 5%; }
+        }
+    </style>
 </head>
 
 <body>
 
+<div class="mesh-bg" id="meshBackground"></div>
+
 <div class="header-bar">
     <div class="header-title">Lecturer Information</div>
-    <button class="back-button" onclick="window.history.back()">Back</button>
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> BACK
+    </button>
 </div>
 
 <div id="mainContent" class="wrapper">
 
-    <div class="profile-section">
-        <img
-            src="{{ $lecturer->image 
-                    ? asset('uploads/'.$lecturer->image) 
-                    : asset('images/default.jpg') }}">
-        <br>
-        <button class="edit-btn" onclick="openModal()">EDIT INFORMATION</button>
+    <div class="profile-section animate-entry">
+        <div class="img-wrapper">
+            <img id="profileDisplay" 
+                 src="{{ $lecturer->image ? asset('uploads/'.$lecturer->image) : asset('images/default.jpg') }}" 
+                 alt="Profile">
+        </div>
+        
+        <button class="edit-btn" onclick="openModal()">
+            <i class="fas fa-magic"></i> &nbsp; UPDATE INFORMATION
+        </button>
     </div>
 
     <div class="quick-info-row">
-        <div class="quick-info-card">
-            <h3>ACADEMIC</h3>
+        <div class="quick-info-card reveal">
+            <h3>Academic</h3>
             <div class="stat-item">
-                <span class="stat-label">Designation:</span>
-                <span class="stat-value">Head of Department</span>
+                <span class="stat-label">Designation</span>
+                <span class="stat-value">Lecturer / Staff</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">Years of Service::</span>
-                <span class="stat-value">5 Years</span>
+                <span class="stat-label">Department</span>
+                <span class="stat-value">{{ $lecturer->department }}</span>
             </div>
         </div>
 
-        <div class="quick-info-card">
+        <div class="quick-info-card reveal">
             <h3>Current Status</h3>
             <div class="stat-item">
-                <span class="stat-label">Duty Time:</span>
-                <span class="stat-value">{{ $stats['office_hours'] }}</span>
+                <span class="stat-label">Duty Time</span>
+                <span class="stat-value" style="font-size: 12px;">{{ $stats['office_hours'] }}</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">Monthly Attendance:</span>
-                <span class="stat-value">{{ $stats['attendance_rate'] }}</span>
+                <span class="stat-label">Attendance Rate</span>
+                <span class="stat-value" style="color: #10b981;">{{ $stats['attendance_rate'] }}</span>
             </div>
         </div>
     </div>
-    <div class="info-section">
+
+    <div class="info-section reveal">
         <h2 class="section-title">Personal Information</h2>
         <div class="info-box">
-            <p><span class="label">Name:</span> {{ $lecturer->nama }}</p>
-            <p><span class="label">Department:</span> {{ $lecturer->department }}</p>
-            <p><span class="label">Phone Number:</span> {{ $lecturer->phone }}</p>
-            <p><span class="label">Email:</span> {{ $lecturer->email }}</p>
+            <p><span class="label-text">Full Name</span> <span class="value-text">{{ $lecturer->nama }}</span></p>
+            <p><span class="label-text">Faculty</span> <span class="value-text">{{ $lecturer->department }}</span></p>
+            <p><span class="label-text">Phone Number</span> <span class="value-text">{{ $lecturer->phone }}</span></p>
+            <p><span class="label-text">Email Address</span> <span class="value-text">{{ $lecturer->email }}</span></p>
         </div>
     </div>
 
-    <div class="info-section">
+    <div class="info-section reveal">
         <h2 class="section-title">Latest Attendance</h2>
-
         @if($attendance)
         <div class="info-box">
-            <p><span class="label">Date:</span> {{ $attendance->date_submit }}</p>
-            <p><span class="label">Start Time:</span> {{ $attendance->time }}</p>
-            <p><span class="label">End Date:</span> {{ $attendance->date_end }}</p>
-            <p><span class="label">Location:</span> {{ $attendance->location }}</p>
-            <p><span class="label">Note:</span> {{ $attendance->remarks }}</p>
+            <p><span class="label-text">Date Logged</span> <span class="value-text">{{ $attendance->date_submit }}</span></p>
+            <p><span class="label-text">Check-in Time</span> <span class="value-text">{{ $attendance->time }} {{ isset($attendance->time_out) ? '- '.$attendance->time_out : '' }}</span></p>
+            <p><span class="label-text">Current Location</span> <span class="value-text"><i class="fas fa-location-dot" style="color:#ef4444"></i> {{ $attendance->location }}</span></p>
+            <p><span class="label-text">Remarks</span> <span class="value-text" style="font-style: italic;">"{{ $attendance->remarks }}"</span></p>
         </div>
         @else
-        <div style="padding:15px; opacity:0.8;">No attendance record found.</div>
+        <div style="padding:20px; text-align:center; color: var(--text-grey); background: rgba(0,0,0,0.02); border-radius: 20px;">
+            <i class="fas fa-info-circle"></i> &nbsp; No recent records found.
+        </div>
         @endif
     </div>
 
-    <div class="footer">
-        This system ensures that your personal information remains confidential.
+    <div style="text-align:center; margin-top: 40px; color: var(--text-grey); font-size: 12px; font-weight: 600;">
+        © 2025 LECTTRACK SYSTEM • LECTURER INFORMATION 
     </div>
 </div>
 
 <div id="editModal" class="modal-bg">
-    <div class="modal-box">
-        <div class="modal-title">Edit Information</div>
+    <div class="modal-box" id="modalBox">
+        <div style="text-align:center; margin-bottom: 30px;">
+            <h2 style="font-weight:800; color:var(--navy);">Update Profile</h2>
+            <p style="font-size:13px; color:var(--text-grey);">Keep your information up to date</p>
+        </div>
 
         <form action="{{ route('lecturer.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
-            <label>Name:</label>
+            <label style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase;">Name</label>
             <input type="text" name="nama" value="{{ $lecturer->nama }}">
 
-            <label>Department:</label>
+            <label style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase;">Department</label>
             <input type="text" name="department" value="{{ $lecturer->department }}">
 
-            <label>Phone Number:</label>
+            <label style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase;">Phone</label>
             <input type="text" name="phone" value="{{ $lecturer->phone }}">
 
-            <label>Email:</label>
+            <label style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase;">Email</label>
             <input type="email" name="email" value="{{ $lecturer->email }}">
 
-            <label>Change Profile Picture:</label>
-            <input type="file" name="image">
+            <label style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase;">New Photo</label>
+            <input type="file" name="image" style="background:none; border:none; padding:10px 0;">
 
-            <div class="modal-actions">
-                <button type="button" onclick="closeModal()" class="btn btn-cancel">Cancel</button>
-                <button type="submit" class="btn btn-save">Save</button>
+            <div class="modal-actions" style="display:flex; gap:15px;">
+                <button type="button" onclick="closeModal()" class="btn-ui btn-cancel">CANCEL</button>
+                <button type="submit" class="btn-ui btn-save">SAVE CHANGES</button>
             </div>
-
         </form>
     </div>
 </div>
 
 <script>
-function openModal() {
-    document.getElementById("editModal").style.display = "flex";
-    document.getElementById("mainContent").classList.add("blurred");
-}
+    // GSAP Entrance Animations
+    window.onload = () => {
+        const tl = gsap.timeline();
+        tl.from(".header-bar", { y: -100, opacity: 0, duration: 1, ease: "power4.out" })
+          .from(".animate-entry", { scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.7)" }, "-=0.5")
+          .from(".reveal", { 
+            y: 40, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out" 
+          }, "-=0.5");
+    };
 
-function closeModal() {
-    document.getElementById("editModal").style.display = "none";
-    document.getElementById("mainContent").classList.remove("blurred");
-}
+    function openModal() {
+        document.getElementById("editModal").style.display = "flex";
+        document.getElementById("mainContent").classList.add("blurred");
+    }
+
+    function closeModal() {
+        document.getElementById("editModal").style.display = "none";
+        document.getElementById("mainContent").classList.remove("blurred");
+    }
 </script>
 
 </body>
