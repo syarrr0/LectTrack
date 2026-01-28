@@ -62,22 +62,22 @@
     <div class="stat-card">
         <div class="icon-box bg-blue-100 text-blue-600"><i data-lucide="users"></i></div>
         <p class="stat-label">Total Staff Record Today</p>
-        <p class="stat-value counter" data-target="{{ $totalLecturers ?? 0 }}">0</p>
+        <p class="stat-value counter" data-target="{{ $totalLecturers }}">0</p>
     </div>
     <div class="stat-card">
         <div class="icon-box bg-green-100 text-green-600"><i data-lucide="map-pin"></i></div>
         <p class="stat-label">In College Today</p>
-        <p class="stat-value counter" data-target="{{ $inCollege ?? 0 }}">0</p>
+        <p class="stat-value counter" data-target="{{ $inCollege }}">0</p>
     </div>
     <div class="stat-card">
         <div class="icon-box bg-red-100 text-red-600"><i data-lucide="calendar-off"></i></div>
         <p class="stat-label">On Leave Today</p>
-        <p class="stat-value counter" data-target="{{ $sickLeave ?? 0 }}">0</p>
+        <p class="stat-value counter" data-target="{{ $sickLeave }}">0</p>
     </div>
     <div class="stat-card">
         <div class="icon-box bg-orange-100 text-orange-600"><i data-lucide="plane"></i></div>
         <p class="stat-label">Outside Duty Today</p>
-        <p class="stat-value counter" data-target="{{ $outsideDuty ?? 0 }}">0</p>
+        <p class="stat-value counter" data-target="{{ $outsideDuty }}">0</p>
     </div>
   </section>
 </main>

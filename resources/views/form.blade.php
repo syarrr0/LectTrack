@@ -293,7 +293,7 @@
 <body>
 
 <nav class="navbar">
-    <div class="logo">LectTrack.</div>
+    <div class="logo">Attendance</div>
     <a href="{{ route('lecturer.dashboard') }}" class="back-link">
         <i class="fas fa-chevron-left"></i> BACK TO HOME
     </a>

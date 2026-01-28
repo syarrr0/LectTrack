@@ -11,35 +11,35 @@ use Illuminate\Support\Facades\DB;
 class AdminDashboardController extends Controller
 {
     public function dashboard()
-    {
-        $today = Carbon::today();
+{
+    $today = Carbon::today();
+    
+    // Ambil jumlah sebenar semua pensyarah dari jadual lecturers
+    $totalLecturers = \App\Models\Lecturer::count(); 
 
-        $totalLecturers = Attendance::whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->distinct('lecturer_id')
-            ->count('lecturer_id');
+    // Kekalkan pengiraan sedia ada untuk mereka yang bertugas di luar/cuti
+    $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
+        ->whereDate('date_end', '>=', $today)
+        ->whereIn('selection', ['CUTI(MC)', 'OTHERS'])
+        ->distinct('lecturer_id')
+        ->count('lecturer_id');
 
-        $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', ['CUTI(MC)', 'OTHERS'])
-            ->distinct('lecturer_id')
-            ->count('lecturer_id');
+    $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
+        ->whereDate('date_end', '>=', $today)
+        ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL']) // Tambah KURSUS jika perlu
+        ->distinct('lecturer_id')
+        ->count('lecturer_id');
 
-        $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', ['MESYUARAT', 'PROGRAM'])
-            ->distinct('lecturer_id')
-            ->count('lecturer_id');
+    // In College = Jumlah Semua Staf - (Cuti + Tugas Luar)
+    $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
 
-        $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
-
-        return view('admin.dashboard', compact(
-            'totalLecturers',
-            'inCollege',
-            'sickLeave',
-            'outsideDuty'
-        ));
-    }
+    return view('admin.dashboard', compact(
+        'totalLecturers',
+        'inCollege',
+        'sickLeave',
+        'outsideDuty'
+    ));
+}
 
     public function realtimeStats()
     {
