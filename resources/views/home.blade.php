@@ -27,11 +27,11 @@
 
     <nav class="button-group">
       <a href="{{ url('/lecturer/login') }}" class="btn btn-lecturer" data-aos="fade-left" data-aos-delay="600">
-        <i data-lucide="user"></i> Lecturer Sign In
+        <i data-lucide="user"></i> Lecturer Log In
       </a>
-      <a href="{{ url('/admin/login') }}" class="btn btn-admin" data-aos="fade-left" data-aos-delay="700">
+      <!-- <a href="{{ url('/admin/login') }}" class="btn btn-admin" data-aos="fade-left" data-aos-delay="700">
         <i data-lucide="shield-check"></i> Administrative Login
-      </a>
+      </a> -->
     </nav>
 
     <footer class="footer-info" data-aos="fade-up" data-aos-delay="800">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LectTrack | FORM</title>
+    <title>Status Record | LectTrack</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -29,7 +29,6 @@
 
         body {
             background-color: var(--light-blue-bg);
-            /* Soft mesh background effect */
             background-image: 
                 radial-gradient(at 0% 0%, rgba(0, 112, 255, 0.05) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(0, 43, 91, 0.05) 0px, transparent 50%);
@@ -96,7 +95,6 @@
             align-items: start;
         }
 
-        /* INFO PANEL */
         .hero-section h1 {
             font-size: 48px;
             font-weight: 800;
@@ -183,7 +181,8 @@
         }
 
         .form-grid {
-            display: grid;
+            display: flex;
+            flex-direction: column;
             gap: 24px;
         }
 
@@ -224,7 +223,6 @@
             gap: 20px;
         }
 
-        /* --- GLASS BUTTON --- */
         .btn-submit {
             background: var(--navy-deep);
             color: var(--white);
@@ -246,7 +244,6 @@
             box-shadow: 0 20px 35px rgba(0, 26, 53, 0.25);
         }
 
-        /* --- OVERLAYS --- */
         .overlay {
             position: fixed;
             inset: 0;
@@ -281,7 +278,6 @@
 
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* Responsive */
         @media (max-width: 950px) {
             .wrapper { grid-template-columns: 1fr; margin-top: 100px; }
             .hero-section { text-align: center; }
@@ -293,7 +289,7 @@
 <body>
 
 <nav class="navbar">
-    <div class="logo">Attendance</div>
+    <div class="logo">Status Record</div>
     <a href="{{ route('lecturer.dashboard') }}" class="back-link">
         <i class="fas fa-chevron-left"></i> BACK TO HOME
     </a>
@@ -331,12 +327,22 @@
             <div class="form-grid">
                 <div class="input-stack">
                     <label>Pilihan Tujuan</label>
-                    <select name="selection" id="selection" required>
+                    <select name="selection" id="selection" required onchange="checkSelection()">
                         <option value="" disabled selected>Select category...</option>
-                        <option value="CUTI(MC)">CUTI (MC)</option>
+                        <option value="CUTI(MC)">CUTI</option>
                         <option value="KURSUS/BENGKEL">KURSUS/BENGKEL</option>
                         <option value="MESYUARAT">MESYUARAT</option>
                         <option value="OTHERS">OTHERS</option>
+                    </select>
+                </div>
+
+                <div class="input-stack" id="leaveTypeContainer" style="display: none;">
+                    <label>Jenis Cuti</label>
+                    <select name="leave_type" id="leave_type">
+                        <option value="" disabled selected>Pilih jenis cuti...</option>
+                        <option value="Cuti Sakit (MC)">Cuti Sakit (MC)</option>
+                        <option value="Cuti Rehat Khas (CRK)">Cuti Rehat Khas (CRK)</option>
+                        <option value="Cuti Tanpa Rekod (CTR)">Cuti Tanpa Rekod (CTR)</option>
                     </select>
                 </div>
 
@@ -351,7 +357,7 @@
                     </div>
                 </div>
 
-                <div class="dual-columns">
+                <div class="dual-columns" id="timeSection">
                     <div class="input-stack">
                         <label>Waktu Mula</label>
                         <input type="time" name="time" id="time" required>
@@ -384,7 +390,7 @@
     <div class="modal-box">
         <i class="fas fa-clipboard-check" style="font-size: 40px; color: var(--accent-blue); margin-bottom: 20px;"></i>
         <h3 style="margin-bottom: 10px;">Confirm Submission?</h3>
-        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">Please ensure all date and time entries are accurate before proceeding.</p>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">Please ensure all entries are accurate before proceeding.</p>
         <div style="display: flex; gap: 12px;">
             <button class="btn-submit" style="background:#F1F5F9; color:var(--navy-deep); box-shadow:none;" onclick="hideUI('confirmOverlay')">CANCEL</button>
             <button class="btn-submit" onclick="executeSubmission()">CONFIRM & SEND</button>
@@ -411,6 +417,48 @@
 </div>
 
 <script>
+    function checkSelection() {
+        const mainSelection = document.getElementById('selection').value;
+        const leaveContainer = document.getElementById('leaveTypeContainer');
+        const leaveSelect = document.getElementById('leave_type');
+        const timeSection = document.getElementById('timeSection');
+        const locationInput = document.getElementById('tempat');
+        const remarksInput = document.getElementById('remarks');
+        
+        // Input waktu mula/tamat
+        const timeStart = document.getElementById('time');
+        const timeEnd = document.getElementById('time_out');
+
+        if (mainSelection === 'CUTI(MC)') {
+            // Paparkan dropdown jenis cuti
+            leaveContainer.style.display = 'flex';
+            leaveSelect.required = true;
+
+            // Sembunyikan bahagian Waktu
+            timeSection.style.display = 'none';
+            timeStart.required = false;
+            timeEnd.required = false;
+
+            // Kemaskini placeholder
+            locationInput.placeholder = "Contoh: Rumah / Hospital";
+            remarksInput.placeholder = "Sila nyatakan sebab cuti";
+        } else {
+            // Sembunyikan jenis cuti
+            leaveContainer.style.display = 'none';
+            leaveSelect.required = false;
+            leaveSelect.value = ""; 
+
+            // Paparkan semula bahagian Waktu
+            timeSection.style.display = 'grid';
+            timeStart.required = true;
+            timeEnd.required = true;
+
+            // Kembalikan placeholder asal
+            locationInput.placeholder = "Enter venue name";
+            remarksInput.placeholder = "Provide activity details";
+        }
+    }
+
     function requestConfirmation() {
         const form = document.getElementById('attendanceForm');
         if(!form.checkValidity()){ form.reportValidity(); return; }
@@ -427,7 +475,6 @@
 
         let formData = new FormData(document.getElementById("attendanceForm"));
 
-        // Intentional delay for professional feel (1.5s)
         setTimeout(() => {
             fetch("{{ route('attendance.submit') }}", {
                 method: "POST",

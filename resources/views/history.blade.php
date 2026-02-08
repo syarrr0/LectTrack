@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>Attendance History | LectTrack 2027</title>
+    <title>Movement Logs | LectTrack</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -129,7 +129,7 @@
 <div class="header">
     <div class="flex flex-col">
       
-        <h1 class="text-2xl font-black tracking-tighter text-slate-900">Lecturer History</h1>
+        <h1 class="text-2xl font-black tracking-tighter text-slate-900">Movement Logs</h1>
     </div>
     
     <div class="flex items-center space-x-4">
@@ -137,9 +137,9 @@
             <i class="far fa-clock text-blue-500"></i>
             <span>Loading...</span>
         </div>
-        <button onclick="window.history.back()" class="back-link">
-            <i class="fas fa-chevron-left"></i> <span>Back</span>
-        </button>
+       <a href="{{ route('lecturer.dashboard') }}" class="back-link" style="text-decoration: none; display: inline-flex; align-items: center;">
+    <i class="fas fa-chevron-left"></i> <span>Back</span>
+</a>
     </div>
 </div>
 

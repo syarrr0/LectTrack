@@ -272,38 +272,29 @@
         <h2>Log In</h2>
         <small>Welcome back, please log in first</small>
 
-        <form method="POST" action="{{ route('lecturer.login.submit') }}">
-            @csrf
+<form method="POST" action="{{ route('lecturer.login.submit') }}">
+    @csrf
 
-            <div class="input">
-                <label>Username</label>
-                <input type="text" name="nama" autocomplete="off" required>
-            </div>
+    <div class="input">
+        <label>Username</label>
+        <input type="text" name="nama" value="{{ old('nama') }}" autocomplete="off" required>
+    </div>
 
-            <div class="input">
-                <label>Department</label>
-                <input type="text" name="department" autocomplete="off" required>
-            </div>
+    <div class="input">
+        <label>Password</label>
+        <input type="password" id="password" name="password" required>
+        <span class="eye-icon" onclick="togglePassword()">
+            <i id="toggleIcon" class="fa-solid fa-eye"></i>
+        </span>
 
-            <div class="input">
-                <label>Password</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" required>
-<span class="eye-icon" onclick="togglePassword()">
-    <i id="toggleIcon" class="fa-solid fa-eye"></i>
-</span>
+        <p class="forgot-text">
+            Create new account
+            <a href="{{ url('signup') }}">Sign Up</a>
+        </p>
+    </div>
 
-
-                <p class="forgot-text">
-                    Create new account
-                    <a href="{{ url('signup') }}">Sign Up</a>
-                </p>
-
-            </div>
-
-            
-            <button type="submit">Log In</button>
-
-        </form>
+    <button type="submit">Log In</button>
+</form>
 
     </div>
 </div>

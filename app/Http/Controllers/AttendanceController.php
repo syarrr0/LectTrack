@@ -17,36 +17,45 @@ class AttendanceController extends Controller
         return view('form');
     }
 
-    public function submitForm(Request $request)
-    {
-        // Ambil lecturer_id dari session (LEBIH SELAMAT)
-        $lecturer_id = $request->session()->get('lecturer_id');
+   public function submitForm(Request $request)
+{
+    $lecturer_id = $request->session()->get('lecturer_id');
 
-        if (!$lecturer_id) {
-            return redirect()->route('lecturer.login')
-                ->withErrors(['login_error' => 'Please log in again.']);
-        }
-
-        // Validate tanpa lecturer_id
-        $request->validate([
-            'date_submit' => 'required|date',
-            'date_end' => 'required|date',
-            'selection' => 'required',
-            'time' => 'required',
-            'location' => 'required',
-            'remarks' => 'required',
-        ]);
-
-        Attendance::create([
-            'lecturer_id' => $lecturer_id,
-            'date_submit' => $request->date_submit,
-            'date_end' => $request->date_end,
-            'selection' => $request->selection,
-            'time' => $request->time,
-            'location' => $request->location,
-            'remarks' => $request->remarks,
-        ]);
-
-        return back()->with('success', 'Attendance has been successfully recorded!');
+    if (!$lecturer_id) {
+        return response()->json(['error' => 'Please log in again.'], 401);
     }
+
+    // Cek jika user pilih kategori CUTI
+    $isCuti = ($request->selection === 'CUTI(MC)');
+
+    // 1. Kemaskini Validation
+    $request->validate([
+        'date_submit' => 'required|date',
+        'date_end'    => 'required|date',
+        'selection'   => 'required',
+        'time'        => $isCuti ? 'nullable' : 'required', // Nullable jika cuti
+        'location'    => 'required',
+        'remarks'     => 'required',
+    ]);
+
+    // 2. Gabungkan "CUTI" dengan jenis spesifik (MC/CRK/CTR)
+    $finalSelection = $request->selection;
+    if ($isCuti && $request->leave_type) {
+        $finalSelection = "CUTI (" . $request->leave_type . ")";
+    }
+
+    // 3. Simpan data
+    Attendance::create([
+        'lecturer_id' => $lecturer_id,
+        'date_submit' => $request->date_submit,
+        'date_end'    => $request->date_end,
+        'selection'   => $finalSelection, 
+        'time'        => $isCuti ? null : $request->time, // Simpan null jika cuti
+        'location'    => $request->location,
+        'remarks'     => $request->remarks,
+    ]);
+
+    // Berikan respon JSON kerana Blade anda menggunakan fetch()
+    return response()->json(['success' => true]);
+}
 }

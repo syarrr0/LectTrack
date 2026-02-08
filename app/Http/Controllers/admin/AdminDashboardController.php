@@ -142,5 +142,35 @@ class AdminDashboardController extends Controller
             'leavePercent'
         ));
     }
+    public function listMovement($type)
+{
+    $today = \Carbon\Carbon::today();
+    $query = \App\Models\Attendance::with('lecturer') // Pastikan ada relationship 'lecturer' di Model Attendance
+                ->whereDate('date_submit', '<=', $today)
+                ->whereDate('date_end', '>=', $today);
+
+    if ($type == 'sickLeave') {
+        $query->whereIn('selection', ['CUTI(MC)', 'OTHERS']);
+    } elseif ($type == 'outsideDuty') {
+        $query->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL']);
+    }
+
+    $records = $query->get();
+
+    return view('admin.movement_list', compact('records', 'type'));
+}
    
+public function listInCollege()
+{
+    $today = \Carbon\Carbon::today();
+
+    $notInCollegeIds = \App\Models\Attendance::whereDate('date_submit', '<=', $today)
+        ->whereDate('date_end', '>=', $today)
+        ->pluck('lecturer_id');
+
+    $lecturersInCollege = \App\Models\Lecturer::whereNotIn('id', $notInCollegeIds)->get();
+
+    // PASTIKAN NAMA DI SINI ADALAH in_college_list
+    return view('admin.in_college_list', compact('lecturersInCollege'));
+}
 }

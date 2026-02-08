@@ -87,7 +87,7 @@
             <div class="icon-box bg-blue">
                 <i class="fas fa-calendar-check"></i>
             </div>
-            <h3>Record Attendance</h3>
+            <h3>Status Record</h3>
             <p>Submit your daily attendance quickly and easily.</p>
             <span class="btn-action">Record Now <i class="fas fa-arrow-right"></i></span>
         </a>
@@ -96,7 +96,7 @@
             <div class="icon-box bg-green">
                 <i class="fas fa-history"></i>
             </div>
-            <h3>History Attendance</h3>
+            <h3>Movement Logs</h3>
             <p>View and track all your previous attendance records.</p>
             <span class="btn-action">View History <i class="fas fa-arrow-right"></i></span>
         </a>

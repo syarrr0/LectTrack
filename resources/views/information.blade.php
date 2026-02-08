@@ -239,9 +239,9 @@
 
 <div class="header-bar">
     <div class="header-title">Lecturer Information</div>
-    <button class="back-button" onclick="window.history.back()">
-        <i class="fas fa-arrow-left"></i> BACK
-    </button>
+   <a href="{{ route('lecturer.dashboard') }}" class="back-button" style="text-decoration: none;">
+    <i class="fas fa-arrow-left"></i> BACK
+</a>
 </div>
 
 <div id="mainContent" class="wrapper">

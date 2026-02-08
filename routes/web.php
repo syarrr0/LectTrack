@@ -173,3 +173,10 @@ Route::post('/api/notifications/clear-all', [AdminController::class, 'clearAllNo
 Route::post('/admin/notifications/store', [AdminController::class, 'storeNotification'])->name('admin.notifications.store');
 
 Route::delete('/lecturer/delete/{id}', [LecturerController::class, 'destroy']);
+
+// Untuk klik kotak kat admin
+Route::get('/admin/movement-list/{type}', [AdminDashboardController::class, 'listMovement'])->name('admin.movement.list');
+
+// Route untuk senarai pergerakan (In College)
+
+Route::get('/admin/in-college', [AdminDashboardController::class, 'listInCollege'])->name('admin.in_college.list');

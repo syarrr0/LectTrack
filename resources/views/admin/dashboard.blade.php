@@ -58,28 +58,32 @@
     </div>
   </section>
 
-  <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <div class="stat-card">
+ <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <a href="{{ route('admin.index') }}" class="stat-card block hover:shadow-lg transition-shadow">
         <div class="icon-box bg-blue-100 text-blue-600"><i data-lucide="users"></i></div>
-        <p class="stat-label">Total Staff Record Today</p>
+        <p class="stat-label">Total Staff Record</p>
         <p class="stat-value counter" data-target="{{ $totalLecturers }}">0</p>
-    </div>
-    <div class="stat-card">
-        <div class="icon-box bg-green-100 text-green-600"><i data-lucide="map-pin"></i></div>
-        <p class="stat-label">In College Today</p>
-        <p class="stat-value counter" data-target="{{ $inCollege }}">0</p>
-    </div>
-    <div class="stat-card">
+    </a>
+
+<a href="{{ route('admin.in_college.list') }}" class="stat-card block">
+    <div class="icon-box bg-green-100 text-green-600"><i data-lucide="map-pin"></i></div>
+    <p class="stat-label">In College Today</p>
+    <p class="stat-value counter" data-target="{{ $inCollege }}">0</p>
+</a>
+
+    <a href="{{ route('admin.movement.list', 'sickLeave') }}" class="stat-card block hover:shadow-lg transition-shadow">
         <div class="icon-box bg-red-100 text-red-600"><i data-lucide="calendar-off"></i></div>
         <p class="stat-label">On Leave Today</p>
         <p class="stat-value counter" data-target="{{ $sickLeave }}">0</p>
-    </div>
-    <div class="stat-card">
+    </a>
+
+    <a href="{{ route('admin.movement.list', 'outsideDuty') }}" class="stat-card block hover:shadow-lg transition-shadow">
         <div class="icon-box bg-orange-100 text-orange-600"><i data-lucide="plane"></i></div>
-        <p class="stat-label">Outside Duty Today</p>
+        <p class="stat-label">Official Duty Today</p>
         <p class="stat-value counter" data-target="{{ $outsideDuty }}">0</p>
-    </div>
-  </section>
+    </a>
+    
+</section>
 </main>
 
 <footer class="w-full bg-white/90 backdrop-blur-md mt-10">

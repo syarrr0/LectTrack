@@ -12,38 +12,45 @@ class LecturerAuthController extends Controller
         return view('lecturer_login');
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'nama' => 'required',
-            'department' => 'required',
-            'password' => 'required',
+   public function login(Request $request)
+{
+    // Validasi hanya nama dan password
+    $request->validate([
+        'nama' => 'required',
+        'password' => 'required',
+    ]);
+
+    $inputName = $request->nama;
+    $inputPassword = $request->password;
+
+    // 1. Cuba cari dalam table ADMINS dahulu
+    $admin = \DB::table('admins')->where('name', $inputName)->first();
+    
+    if ($admin && $admin->password === $inputPassword) {
+        session([
+            'admin_logged_in' => true,
+            'admin_name' => $admin->name
         ]);
-
-        // Cari pensyarah
-        $lecturer = Lecturer::where('nama', $request->nama)
-                            ->where('department', $request->department)
-                            ->first();
-
-        // Check password tanpa bcrypt
-        if ($lecturer && $lecturer->password === $request->password) 
-        {
-            // Simpan dalam session
-            session([
-                'lecturer_id' => $lecturer->id,
-                'lecturer_name' => $lecturer->nama,
-                'lecturer_department' => $lecturer->department,
-            ]);
-
-            // Redirect ke HomeUser bukan ke dashboard lama
-            return redirect()->route('user.home');
-        }
-
-        return back()->withErrors([
-            'login_error' => 'Sorry, Wrong User or Password. Please try again.',
-        ])->withInput();
+        return redirect()->route('admin.dashboard'); // Terus ke folder admin
     }
 
+    // 2. Jika bukan admin, cari dalam table LECTURERS (guna Model Lecturer)
+    $lecturer = \App\Models\Lecturer::where('nama', $inputName)->first();
+
+    if ($lecturer && $lecturer->password === $inputPassword) {
+        session([
+            'lecturer_id' => $lecturer->id,
+            'lecturer_name' => $lecturer->nama,
+            'lecturer_department' => $lecturer->department, // Simpan untuk kegunaan sistem
+        ]);
+        return redirect()->route('user.home');
+    }
+
+    // 3. Jika dua-dua tak jumpa
+    return back()->withErrors([
+        'login_error' => 'Nama atau Kata Laluan salah!',
+    ])->withInput();
+}
     public function dashboard(Request $request)
     {
         // masih ada route lama, tapi kita perbetulkan supaya tidak crash
