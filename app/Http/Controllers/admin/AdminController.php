@@ -18,25 +18,26 @@ class AdminController extends Controller
     }
     
     // Fungsi untuk simpan notifikasi
-    public function storeNotification(Request $request) 
-    {
-        // Sebaiknya buat validation supaya database tak error kalau admin tertinggal input
-        $request->validate([
-            'title'   => 'required',
-            'day'     => 'required',
-            'date'    => 'required|date',
-            'content' => 'required',
-        ]);
+   public function storeNotification(Request $request) 
+{
+    $request->validate([
+        'title'   => 'required',
+        'date'    => 'required|date',
+        'content' => 'required',
+    ]);
 
-        SiteNotification::create([
-            'title'   => $request->title,
-            'day'     => $request->day,
-            'date'    => $request->date,
-            'content' => $request->content,
-        ]);
+    // Controller tolong kirakan hari (Monday, Tuesday, etc)
+    $dayName = \Carbon\Carbon::parse($request->date)->format('l');
 
-        return back()->with('success', 'Notification pushed successfully!');
-    }
+    \App\Models\SiteNotification::create([
+        'title'   => $request->title,
+        'date'    => $request->date,
+        'content' => $request->content,
+        'day'     => $dayName, // Masukkan hari yang dikira
+    ]);
+
+    return back()->with('success', 'Announcement posted!');
+}
 
     // Fungsi untuk paparkan page notifications
     public function notifications() 

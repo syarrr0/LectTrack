@@ -10,84 +10,147 @@ use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
+    // Kita buat array constants supaya senang nak maintain ejaan selection
+    private $leaveTypes = ['%Cuti Sakit (MC)%', '%Cuti Rehat Khas (CRK)%', '%Cuti Tanpa Rekod (CTR)%'];
+    private $dutyTypes = ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'];
+
     public function dashboard()
-{
-    $today = Carbon::today();
-    
-    // Ambil jumlah sebenar semua pensyarah dari jadual lecturers
-    $totalLecturers = \App\Models\Lecturer::count(); 
-
-    // Kekalkan pengiraan sedia ada untuk mereka yang bertugas di luar/cuti
-    $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
-        ->whereDate('date_end', '>=', $today)
-        ->whereIn('selection', ['CUTI(MC)', 'OTHERS'])
-        ->distinct('lecturer_id')
-        ->count('lecturer_id');
-
-    $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
-        ->whereDate('date_end', '>=', $today)
-        ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL']) // Tambah KURSUS jika perlu
-        ->distinct('lecturer_id')
-        ->count('lecturer_id');
-
-    // In College = Jumlah Semua Staf - (Cuti + Tugas Luar)
-    $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
-
-    return view('admin.dashboard', compact(
-        'totalLecturers',
-        'inCollege',
-        'sickLeave',
-        'outsideDuty'
-    ));
-}
-
-    public function realtimeStats()
     {
         $today = Carbon::today();
+        
+        $totalLecturers = Lecturer::count(); 
 
-        $totalLecturers = Attendance::whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->distinct('lecturer_id')
-            ->count('lecturer_id');
-
+        // Kira unik lecturer_id untuk Cuti
         $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
             ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', ['CUTI(MC)', 'OTHERS'])
+            ->where(function($q) {
+                foreach($this->leaveTypes as $type) {
+                    $q->orWhere('selection', 'LIKE', $type);
+                }
+            })
             ->distinct('lecturer_id')
             ->count('lecturer_id');
 
+        // Kira unik lecturer_id untuk Tugas Rasmi
         $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
             ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', ['MESYUARAT', 'PROGRAM'])
+            ->whereIn('selection', $this->dutyTypes)
             ->distinct('lecturer_id')
             ->count('lecturer_id');
 
         $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
 
-        return response()->json([
-            'totalLecturers' => $totalLecturers,
-            'inCollege' => $inCollege,
-            'sickLeave' => $sickLeave,
-            'outsideDuty' => $outsideDuty,
-        ]);
+        return view('admin.dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
     }
- public function report()
+
+    public function getRealtimeData()
     {
-        $currentYear = Carbon::now()->year;
-        
-        // --- Summary Boxes Data ---
-        
-        // Total Registered Lecturers (from 'lecturers' table)
+        $today = Carbon::today();
         $totalLecturers = Lecturer::count();
         
-        // Total Attendance Records (Total entries in 'attendances' table)
+        $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
+            ->whereDate('date_end', '>=', $today)
+            ->where(function($q) {
+                foreach($this->leaveTypes as $type) {
+                    $q->orWhere('selection', 'LIKE', $type);
+                }
+            })
+            ->distinct('lecturer_id')
+            ->count('lecturer_id');
+
+        $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
+            ->whereDate('date_end', '>=', $today)
+            ->whereIn('selection', $this->dutyTypes)
+            ->distinct('lecturer_id')
+            ->count('lecturer_id');
+
+        return response()->json([
+            'totalLecturers' => $totalLecturers,
+            'sickLeave' => $sickLeave,
+            'outsideDuty' => $outsideDuty,
+            'inCollege' => max(0, $totalLecturers - ($sickLeave + $outsideDuty)),
+        ]);
+    }
+
+   public function dutyList()
+{
+    $today = \Carbon\Carbon::today();
+
+    // 1. Ambil rekod tugasan rasmi hari ini
+    $dutyRecords = \App\Models\Attendance::with('lecturer')
+        ->whereHas('lecturer') 
+        ->whereDate('date_submit', '<=', $today)
+        ->whereDate('date_end', '>=', $today)
+        ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
+        ->get()
+        ->unique('lecturer_id'); // Pastikan 1 orang 1 nama sahaja
+
+    // 2. Group ikut 'jabatan' (bukan department)
+    $lecturersOnDuty = $dutyRecords->map(function($attendance) {
+        return $attendance->lecturer;
+    })->groupBy('department');
+
+    return view('admin.duty_list', compact('lecturersOnDuty'));
+}
+
+    public function leaveList()
+    {
+        $today = Carbon::today();
+
+        $leaveRecords = Attendance::with('lecturer')
+            ->whereHas('lecturer')
+            ->whereDate('date_submit', '<=', $today)
+            ->whereDate('date_end', '>=', $today)
+            ->where(function($q) {
+                foreach($this->leaveTypes as $type) {
+                    $q->orWhere('selection', 'LIKE', $type);
+                }
+            })
+            ->get()
+            ->unique('lecturer_id'); // <--- PENTING: 1 orang 1 rekod dalam senarai
+
+        $lecturersOnLeave = $leaveRecords->map(function($attendance) {
+            return $attendance->lecturer;
+        })->groupBy('department');
+
+        return view('admin.leave_list', compact('lecturersOnLeave'));
+    }
+
+    public function listInCollege()
+    {
+        $today = Carbon::today();
+
+        // Tapis ID staf yang bercuti atau tugas luar
+        $notInCollegeIds = Attendance::whereDate('date_submit', '<=', $today)
+            ->whereDate('date_end', '>=', $today)
+            ->where(function($q) {
+                // Tapis Cuti
+                foreach($this->leaveTypes as $type) {
+                    $q->orWhere('selection', 'LIKE', $type);
+                }
+                // Tapis Tugas Luar
+                $q->orWhereIn('selection', $this->dutyTypes);
+            })
+            ->pluck('lecturer_id')
+            ->unique();
+
+        $lecturersInCollege = Lecturer::whereNotIn('id', $notInCollegeIds)
+            ->orderBy('department', 'asc')
+            ->orderBy('nama', 'asc')
+            ->get()
+            ->groupBy('department');
+
+        return view('admin.in_college_list', compact('lecturersInCollege'));
+    }
+
+    // Fungsi Report (Dikekalkan tapi diselaraskan ejaan)
+    public function report()
+    {
+        $currentYear = Carbon::now()->year;
+        $totalLecturers = Lecturer::count();
         $totalRecords = Attendance::count(); 
-        
-        // Total Unique Duty Types (The new metric to replace 'Total Classes')
         $totalDutyTypes = Attendance::distinct('selection')->count('selection');
         
-        // --- Monthly Trend Data (Line Chart) ---
-        // Count total attendance records per month for the current year.
         $monthlyData = Attendance::select(
                 DB::raw('MONTH(date_submit) as month'),
                 DB::raw('COUNT(id) as count')
@@ -98,79 +161,34 @@ class AdminDashboardController extends Controller
             ->pluck('count', 'month')
             ->toArray();
 
-        // Initialize monthly array with 0 and fill in data
         $monthlyRecords = array_fill(1, 12, 0);
         foreach ($monthlyData as $month => $count) {
             $monthlyRecords[$month] = $count;
         }
 
-        // --- Pie Chart Data (Based on Selection Types) ---
         $selectionCounts = Attendance::select('selection', DB::raw('COUNT(*) as count'))
             ->groupBy('selection')
             ->pluck('count', 'selection')
             ->toArray();
         
-        // Grouping selections into three categories for the Pie Charts:
-        
-        // 1. Active Duty (e.g., KURSUS/BENGKEL)
         $activeDuty = ($selectionCounts['KURSUS/BENGKEL'] ?? 0);
-        
-        // 2. Official Duty (e.g., MESYUARAT, PROGRAM)
         $officialDuty = ($selectionCounts['MESYUARAT'] ?? 0) + ($selectionCounts['PROGRAM'] ?? 0);
+        
+        // Logik ejaan cuti dalam report perlu sama dengan database
+        $leaveDuty = 0;
+        foreach($selectionCounts as $key => $val) {
+            if(str_contains($key, 'Cuti')) $leaveDuty += $val;
+        }
 
-        // 3. Leave Duty (e.g., CUTI(MC), OTHERS)
-        $leaveDuty = ($selectionCounts['CUTI(MC)'] ?? 0) + ($selectionCounts['OTHERS'] ?? 0);
-
-        // Sum of these three categories for percentage calculation
-        $totalGroupedRecords = $activeDuty + $officialDuty + $leaveDuty;
-
-        // Prevent division by zero
-        $totalGrouped = max(1, $totalGroupedRecords);
+        $totalGrouped = max(1, $activeDuty + $officialDuty + $leaveDuty);
 
         $activePercent = round(($activeDuty / $totalGrouped) * 100);
         $officialPercent = round(($officialDuty / $totalGrouped) * 100);
         $leavePercent = round(($leaveDuty / $totalGrouped) * 100);
         
-        // Pass data to view
         return view('admin.report', compact(
-            'totalLecturers',
-            'totalRecords',
-            'totalDutyTypes',
-            'monthlyRecords',
-            'activePercent',
-            'officialPercent',
-            'leavePercent'
+            'totalLecturers', 'totalRecords', 'totalDutyTypes', 'monthlyRecords',
+            'activePercent', 'officialPercent', 'leavePercent'
         ));
     }
-    public function listMovement($type)
-{
-    $today = \Carbon\Carbon::today();
-    $query = \App\Models\Attendance::with('lecturer') // Pastikan ada relationship 'lecturer' di Model Attendance
-                ->whereDate('date_submit', '<=', $today)
-                ->whereDate('date_end', '>=', $today);
-
-    if ($type == 'sickLeave') {
-        $query->whereIn('selection', ['CUTI(MC)', 'OTHERS']);
-    } elseif ($type == 'outsideDuty') {
-        $query->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL']);
-    }
-
-    $records = $query->get();
-
-    return view('admin.movement_list', compact('records', 'type'));
-}
-   
-public function listInCollege()
-{
-    $today = \Carbon\Carbon::today();
-
-    $notInCollegeIds = \App\Models\Attendance::whereDate('date_submit', '<=', $today)
-        ->whereDate('date_end', '>=', $today)
-        ->pluck('lecturer_id');
-
-    $lecturersInCollege = \App\Models\Lecturer::whereNotIn('id', $notInCollegeIds)->get();
-
-    // PASTIKAN NAMA DI SINI ADALAH in_college_list
-    return view('admin.in_college_list', compact('lecturersInCollege'));
-}
 }

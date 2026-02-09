@@ -94,13 +94,21 @@ public function searchAttendanceHistory(Request $request, $lecturer_id)
 =================================*/
 protected function calculateSummary($collection)
 {
-    // Anda boleh mengubahsuai kriteria di bawah mengikut data sebenar
     $totalRecords = $collection->count();
-    $hadir = $collection->whereNotIn('selection', ['CUTI(MC)', 'sick leave'])->count();
-    $cuti = $collection->whereIn('selection', ['CUTI(MC)', 'sick leave'])->count();
-    $mesyuarat = $collection->where('selection', 'MESYUARAT')->count();
+    
+    // Kira Cuti: Mencari apa-apa string yang mengandungi perkataan 'CUTI'
+    // Ini akan merangkumi Cuti Sakit, CRK, dan CTR
+    $cuti = $collection->filter(function ($item) {
+        return str_contains(strtoupper($item->selection), 'CUTI');
+    })->count();
 
-    // Tambah pengiraan peratusan jika perlu
+    // Kira Hadir: Semua rekod yang BUKAN jenis Cuti
+    $hadir = $totalRecords - $cuti;
+
+    $mesyuarat = $collection->filter(function ($item) {
+        return strtoupper($item->selection) == 'MESYUARAT';
+    })->count();
+
     $hadirPercentage = $totalRecords > 0 ? round(($hadir / $totalRecords) * 100, 1) : 0;
 
     return [
@@ -108,9 +116,8 @@ protected function calculateSummary($collection)
         'hadir' => $hadir,
         'cuti' => $cuti,
         'mesyuarat' => $mesyuarat,
-        'hadirPercentage' => $hadirPercentage
+        'hadirPercentage' => $hadirPercentage,
     ];
 }
-
 
 }

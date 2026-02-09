@@ -3,147 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Notifications | LectTrack</title>
+    <title>Send Notification | LectTrack</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            /* Ganti URL gambar di bawah dengan gambar pilihan anda atau guna Unsplash */
-            background: linear-gradient(rgba(248, 250, 252, 0.8), rgba(248, 250, 252, 0.8)), 
-                        url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2000');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        .glass-container {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        .bg-glow-top {
+            position: absolute;
+            top: -5%;
+            right: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            z-index: -1;
         }
 
-        .input-group:focus-within label {
-            color: #2563eb;
+        .bg-glow-bottom {
+            position: absolute;
+            bottom: -5%;
+            left: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scale-up { animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes scaleUp {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="antialiased text-slate-900">
 
-    <header class="bg-white/70 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="bg-glow-top"></div>
+    <div class="bg-glow-bottom"></div>
+
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-200">
-                    <i data-lucide="megaphone" class="text-white w-6 h-6"></i>
+                <div class="bg-blue-600 p-2 rounded-xl shadow-lg">
+                    <i data-lucide="bell" class="w-5 h-5 text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-extrabold text-slate-800 tracking-tight">LectTrack Broadcast</h1>
-                    <p class="text-[10px] uppercase tracking-[2px] font-bold text-blue-600">Admin Command Center</p>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-800">System Notification</h1>
+                    <p class="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em]">LectTrack Admin Area</p>
                 </div>
             </div>
-            
-            <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg active:scale-95">
-                <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
-                Return Home
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-all bg-slate-100 px-4 py-2 rounded-xl">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
             </a>
         </div>
     </header>
 
-    <main class="py-12 px-6">
-        <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-4 space-y-6">
-                <div class="glass-container p-6 rounded-[32px]">
-                    <div class="bg-blue-50 w-12 h-12 rounded-2xl flex items-center justify-center mb-4">
-                        <i data-lucide="info" class="text-blue-600"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-lg mb-2">Smart Broadcast</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Notifications will be sent in real-time to all active lecturers. Ensure details are accurate before broadcasting.
-                    </p>
-                </div>
-                <div class="glass-container p-6 rounded-[32px] bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-none">
-                    <i data-lucide="shield-check" class="w-10 h-10 mb-4 opacity-50"></i>
-                    <h3 class="font-bold text-lg mb-1">Secure Channel</h3>
-                    <p class="text-blue-100 text-xs leading-relaxed opacity-80">
-                        This action is encrypted and logged for security auditing purposes.
-                    </p>
-                </div>
-            </div>
+    <main class="max-w-2xl mx-auto px-6 py-16 relative">
+        
+        @if(!session('success'))
+        <div class="bg-white border border-slate-200 rounded-[2.5rem] shadow-xl shadow-slate-200/50 p-1 fade-in">
+            <div class="bg-white rounded-[2.2rem] p-8 md:p-10">
+                <h2 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="w-8 h-1 bg-blue-600 rounded-full"></span>
+                    New Announcement
+                </h2>
 
-            <div class="lg:col-span-8">
-                <div class="glass-container p-8 md:p-10 rounded-[32px]">
-                    <form action="{{ route('admin.notifications.store') }}" method="POST">
-                        @csrf
-                        <div class="space-y-6">
-                            
-                            <div class="input-group">
-                                <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <i data-lucide="type" class="w-4 h-4"></i> Notification Title
-                                </label>
-                                <input type="text" name="title" placeholder="Enter headline..." 
-                                       class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-800 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all" required>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="input-group">
-                                    <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                        <i data-lucide="calendar-days" class="w-4 h-4"></i> Select Day
-                                    </label>
-                                    <select name="day" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-800 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all" required>
-                                        <option value="">Choose Day</option>
-                                        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
-                                        <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                        <i data-lucide="clock" class="w-4 h-4"></i> Date
-                                    </label>
-                                    <input type="date" name="date" 
-                                           class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-800 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all" required>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <i data-lucide="align-left" class="w-4 h-4"></i> Message Description
-                                </label>
-                                <textarea name="content" rows="4" placeholder="Type your message here..." 
-                                          class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-slate-800 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all resize-none" required></textarea>
-                            </div>
-
-                            <button type="submit" class="group w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-extrabold text-lg shadow-xl shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-[0.98]">
-                                <i data-lucide="send" class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i> 
-                                Broadcast Now
-                            </button>
+                <form action="{{ route('admin.notifications.store') }}" method="POST" onsubmit="showLoading()">
+                    @csrf
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Title</label>
+                            <input type="text" name="title" placeholder="What is this about?" 
+                                   class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium text-slate-700 shadow-sm" required>
                         </div>
-                    </form>
-                </div>
+
+                        <div>
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Date</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                                </div>
+                                <input type="date" name="date" value="{{ date('Y-m-d') }}"
+                                       class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl pl-14 pr-6 py-4 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium text-slate-700 shadow-sm" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Message Content</label>
+                            <textarea name="content" rows="6" placeholder="Type your full message here..." 
+                                      class="w-full bg-slate-50 border-2 border-slate-100 rounded-3xl px-6 py-5 focus:outline-none focus:border-blue-500 focus:bg-white transition-all resize-none font-medium text-slate-700 shadow-sm" required></textarea>
+                        </div>
+
+                        <button type="submit" id="sendBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-95">
+                            <i data-lucide="send" class="w-5 h-5" id="btnIcon"></i> 
+                            <span id="sendText">Send Announcement</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+        @else
+        <div class="bg-white border border-slate-100 rounded-[3rem] shadow-2xl p-12 text-center fade-in">
+            <div class="flex justify-center mb-8">
+                <div class="bg-green-50 p-8 rounded-full scale-up relative">
+                    <div class="absolute inset-0 bg-green-200 rounded-full animate-ping opacity-20"></div>
+                    <i data-lucide="check-circle" class="w-20 h-20 text-green-500 relative z-10"></i>
+                </div>
+            </div>
+            
+            <h2 class="text-3xl font-black text-slate-900 mb-3">Message Sent!</h2>
+            <p class="text-slate-500 mb-12 text-lg max-w-sm mx-auto font-medium">Your message is now live and visible to everyone.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="{{ route('admin.dashboard') }}" class="flex-1 bg-slate-900 hover:bg-black text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    Back to Dashboard
+                </a>
+                <a href="{{ route('admin.notifications.index') }}" class="flex-1 bg-white border-2 border-slate-100 text-slate-600 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-all active:scale-95">
+                    Send Another
+                </a>
+            </div>
+        </div>
+        @endif
+
     </main>
 
-    @if(session('success'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            title: 'Mission Accomplished!',
-            text: "{{ session('success') }}",
-            icon: 'success',
-            background: '#ffffff',
-            confirmButtonColor: '#2563eb',
-            customClass: {
-                popup: 'rounded-[32px]',
-                confirmButton: 'rounded-xl px-8 py-3'
-            }
-        });
-    </script>
-    @endif
+    <footer class="py-10 text-center">
+        <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">LectTrack Messaging &copy; 2026</p>
+    </footer>
 
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+
+        function showLoading() {
+            const btn = document.getElementById('sendBtn');
+            const text = document.getElementById('sendText');
+            const icon = document.getElementById('btnIcon');
+            
+            btn.classList.add('opacity-70', 'pointer-events-none', 'bg-blue-800');
+            text.innerText = 'Sending...';
+            if(icon) icon.classList.add('animate-pulse');
+        }
+    </script>
 </body>
 </html>

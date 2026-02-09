@@ -22,7 +22,7 @@
     </div>
     
     <div class="flex items-center gap-3">
-      <a href="{{ route('admin.notifications') }}" class="bg-blue-500/20 hover:bg-blue-600 border border-blue-500/50 text-blue-100 hover:text-white px-5 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+      <a href="{{ route('admin.notifications.index') }}" class="bg-blue-500/20 hover:bg-blue-600 border border-blue-500/50 text-blue-100 hover:text-white px-5 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
         <i data-lucide="bell-ring" class="w-4 h-4"></i> Manage Notifications
       </a>
 
@@ -71,17 +71,19 @@
     <p class="stat-value counter" data-target="{{ $inCollege }}">0</p>
 </a>
 
-    <a href="{{ route('admin.movement.list', 'sickLeave') }}" class="stat-card block hover:shadow-lg transition-shadow">
+   <a href="{{ route('admin.leave_list') }}" class="stat-card group hover:scale-105 transition-transform cursor-pointer">
         <div class="icon-box bg-red-100 text-red-600"><i data-lucide="calendar-off"></i></div>
         <p class="stat-label">On Leave Today</p>
         <p class="stat-value counter" data-target="{{ $sickLeave }}">0</p>
     </a>
 
-    <a href="{{ route('admin.movement.list', 'outsideDuty') }}" class="stat-card block hover:shadow-lg transition-shadow">
-        <div class="icon-box bg-orange-100 text-orange-600"><i data-lucide="plane"></i></div>
-        <p class="stat-label">Official Duty Today</p>
-        <p class="stat-value counter" data-target="{{ $outsideDuty }}">0</p>
-    </a>
+<a href="{{ route('admin.duty_list') }}" class="stat-card group hover:scale-[1.02] transition-all cursor-pointer block">
+    <div class="icon-box bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+        <i data-lucide="briefcase"></i>
+    </div>
+    <p class="stat-label">Official Duty Today</p>
+    <p class="stat-value counter text-indigo-600" data-target="{{ $outsideDuty ?? 0 }}">0</p>
+</a>
     
 </section>
 </main>

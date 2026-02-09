@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SiteNotification extends Model
 {
+    use HasFactory;
+
     protected $table = 'site_notifications';
 
+  
     protected $fillable = [
-        'title',
-        'day',
-        'date',
-        'content',
+        'title', 
+        'content', 
+        'day', 
+        'date'
     ];
+
    public function up(): void
 {
     Schema::create('site_notifications', function (Blueprint $table) {

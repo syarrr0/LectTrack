@@ -163,7 +163,10 @@ Route::get('/change-password', [PasswordController::class, 'showChangeForm'])->n
 Route::post('/update-password', [PasswordController::class, 'updatePassword'])->name('password.update_process');
 
 // noti admin
-Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
+Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications.index');
+
+// Route untuk simpan maklumat (POST)
+Route::post('/admin/notifications/store', [AdminController::class, 'storeNotification'])->name('admin.notifications.store');
 // Route untuk membolehkan HomeUser.blade.php mengambil data notifikasi
 Route::get('/api/notifications/fetch', [AdminController::class, 'fetchNotifications']);
 Route::post('/api/notifications/mark-read', [AdminController::class, 'markAllAsRead']);
@@ -180,3 +183,7 @@ Route::get('/admin/movement-list/{type}', [AdminDashboardController::class, 'lis
 // Route untuk senarai pergerakan (In College)
 
 Route::get('/admin/in-college', [AdminDashboardController::class, 'listInCollege'])->name('admin.in_college.list');
+
+Route::get('/admin/leave-list', [AdminDashboardController::class, 'leaveList'])->name('admin.leave_list');
+
+Route::get('/admin/duty-list', [AdminDashboardController::class, 'dutyList'])->name('admin.duty_list');

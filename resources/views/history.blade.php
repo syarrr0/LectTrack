@@ -33,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* LIQUID GLASS HEADER */
         .header {
             position: fixed; top: 0; width: 100%;
             padding: 12px 32px;
@@ -45,7 +44,6 @@
             z-index: 1000;
         }
 
-        /* IOS LIQUID BUTTON */
         .back-link {
             background: var(--navy-deep);
             color: var(--white);
@@ -81,7 +79,6 @@
 
         .main-content { padding-top: 110px; padding-bottom: 60px; }
         
-        /* CATEGORY STYLING */
         .category-divider {
             display: flex; align-items: center; margin: 50px 0 25px;
         }
@@ -95,7 +92,6 @@
             margin: 0 20px;
         }
 
-        /* CARD STYLE */
         .card-premium {
             background: var(--white);
             border-radius: 32px;
@@ -110,7 +106,6 @@
             border-color: var(--accent-blue);
         }
 
-        /* LIST VIEW */
         .list-container {
             background: var(--white); border-radius: 32px; overflow: hidden;
             border: 1px solid var(--border-subtle);
@@ -128,7 +123,6 @@
 
 <div class="header">
     <div class="flex flex-col">
-      
         <h1 class="text-2xl font-black tracking-tighter text-slate-900">Movement Logs</h1>
     </div>
     
@@ -137,9 +131,9 @@
             <i class="far fa-clock text-blue-500"></i>
             <span>Loading...</span>
         </div>
-       <a href="{{ route('lecturer.dashboard') }}" class="back-link" style="text-decoration: none; display: inline-flex; align-items: center;">
-    <i class="fas fa-chevron-left"></i> <span>Back</span>
-</a>
+        <a href="{{ route('lecturer.dashboard') }}" class="back-link" style="text-decoration: none; display: inline-flex; align-items: center;">
+            <i class="fas fa-chevron-left"></i> <span>Back</span>
+        </a>
     </div>
 </div>
 
@@ -147,6 +141,7 @@
     <div class="max-w-7xl mx-auto px-6">
         
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {{-- SUMMARY BOXES: Nombor di sini akan naik merujuk kepada logic di Controller --}}
             @foreach([
                 ['Total Records', $summary['totalRecords'], 'fa-database', 'bg-blue-500'],
                 ['Present', $summary['hadir'], 'fa-check-circle', 'bg-emerald-500'],
@@ -191,22 +186,26 @@
 
         @php
             $today = \Carbon\Carbon::today();
-            // Data dibahagikan mengikut tahun 2027 sebagai fokus utama
             $comingSoon = $history->filter(fn($item) => \Carbon\Carbon::parse($item->date_submit)->gt($today));
             $currentYear = $history->filter(fn($item) => \Carbon\Carbon::parse($item->date_submit)->lte($today) && \Carbon\Carbon::parse($item->date_submit)->year == 2027);
             $pastRecords = $history->filter(fn($item) => \Carbon\Carbon::parse($item->date_submit)->year < 2027);
             
+            // FUNGSI RENDER ROWS DENGAN LOGIK CUTI BARU
             $renderRows = function($items) {
                 $html = '';
                 foreach($items as $item) {
                     $date = \Carbon\Carbon::parse($item->date_submit)->format('d M Y');
-                    $time = date("h:i A", strtotime($item->time)) . " - " . date("h:i A", strtotime($item->time_out));
+                    
+                    // Detect if it's Cuti (MC, CRK, CTR)
+                    $isCuti = Str::contains(strtoupper($item->selection), 'CUTI');
+                    $time = $isCuti ? "FULL DAY" : (date("h:i A", strtotime($item->time)) . " - " . date("h:i A", strtotime($item->time_out)));
+                    
                     $html .= "
                         <tr class='hover:bg-blue-50/50 transition-colors border-b border-slate-50 last:border-0'>
                             <td class='px-8 py-5 text-sm font-bold text-slate-800'>$date</td>
                             <td class='px-8 py-5'><span class='text-[10px] font-black px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full uppercase tracking-tighter'>{$item->selection}</span></td>
                             <td class='px-8 py-5 text-sm text-slate-600 font-semibold'><i class='fas fa-map-marker-alt text-red-400 mr-2'></i>{$item->location}</td>
-                            <td class='px-8 py-5 text-sm text-slate-500'>$time</td>
+                            <td class='px-8 py-5 text-sm text-slate-500 font-bold'>$time</td>
                             <td class='px-8 py-5 text-xs text-slate-400 italic'>".($item->remarks ?: '-')."</td>
                         </tr>";
                 }
@@ -215,7 +214,6 @@
         @endphp
 
         <div x-cloak>
-            {{-- SECTIONS GENERATOR --}}
             @foreach([
                 ['badge' => 'Coming Soon', 'data' => $comingSoon, 'theme' => 'bg-blue-600'],
                 ['badge' => 'Latest Record', 'data' => $currentYear, 'theme' => 'bg-navy-deep'],
@@ -229,6 +227,7 @@
 
                     <div x-show="currentView === 'card'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                         @foreach($section['data'] as $item)
+                        @php $isCuti = Str::contains(strtoupper($item->selection), 'CUTI'); @endphp
                         <div class="animate-reveal card-premium">
                             <div class="flex justify-between items-start mb-6">
                                 <div class="bg-blue-50 px-4 py-2 rounded-2xl">
@@ -243,7 +242,13 @@
                                     <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-blue-500 text-xs">
                                         <i class="far fa-clock"></i>
                                     </div>
-                                    <p class="text-sm font-bold text-slate-700">{{ date("h:i A", strtotime($item->time)) }} - {{ date("h:i A", strtotime($item->time_out)) }}</p>
+                                    <p class="text-sm font-bold text-slate-700">
+                                        @if($isCuti)
+                                            FULL DAY LEAVE
+                                        @else
+                                            {{ date("h:i A", strtotime($item->time)) }} - {{ date("h:i A", strtotime($item->time_out)) }}
+                                        @endif
+                                    </p>
                                 </div>
                                 <div class="flex items-center gap-4">
                                     <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-red-500 text-xs">
@@ -293,7 +298,6 @@
 </div>
 
 <script>
-    // REAL-TIME CLOCK
     function updateClock() {
         const now = new Date();
         const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
@@ -304,7 +308,6 @@
     updateClock(); 
     setInterval(updateClock, 1000);
 
-    // GSAP ANIMATION
     window.addEventListener('DOMContentLoaded', () => {
         gsap.to(".animate-reveal", {
             opacity: 1,
@@ -316,6 +319,5 @@
         });
     });
 </script>
-
 </body>
 </html>
