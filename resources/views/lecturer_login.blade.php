@@ -269,7 +269,7 @@
     <!-- RIGHT SIDE -->
     <div class="right">
 
-        <h2>Log In Adam</h2>
+        <h2>Log In Adamm</h2>
         <small>Welcome back, please log in first</small>
 
 <form method="POST" action="{{ route('lecturer.login.submit') }}">
