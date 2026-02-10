@@ -111,24 +111,26 @@
 </head>
 <body class="min-h-screen text-slate-800">
 
-<header class="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-3 bg-white/80 backdrop-blur-md border-b border-white/50 shadow-sm transition-all duration-300">
+<header class="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-3 bg-sky-100/85 backdrop-blur-md border-b border-sky-200/50 shadow-sm transition-all duration-300">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
     
     <div class="flex items-center gap-4">
         <img src="{{ asset('images/logo1.png') }}" alt="LectTrack" class="h-8 md:h-10"> 
-        </div>
+    </div>
     
     <div class="flex items-center gap-2 md:gap-3 w-full md:w-auto justify-center md:justify-end">
-      <a href="{{ route('admin.notifications.index') }}" class="flex-1 md:flex-none justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+      
+      <a href="{{ route('admin.notifications.index') }}" class="flex-1 md:flex-none justify-center bg-white/60 hover:bg-white text-blue-600 border border-blue-200 hover:border-blue-300 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-sm">
         <i data-lucide="bell-ring" class="w-4 h-4"></i> 
         <span class="hidden sm:inline">Notifications</span>
       </a>
 
-      <button onclick="confirmLogout()" class="flex-1 md:flex-none justify-center bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+      <button onclick="confirmLogout()" class="flex-1 md:flex-none justify-center bg-white/60 hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-300 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-sm">
         <i data-lucide="log-out" class="w-4 h-4"></i> 
         <span class="hidden sm:inline">Sign Out</span>
         <span class="inline sm:hidden">Exit</span>
       </button>
+
     </div>
   </div>
 </header>
