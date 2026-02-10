@@ -108,9 +108,7 @@
         transform: translateY(-2px);
     }
 
-    p{
-      color:black;
-    }
+  
   </style>
 </head>
 <body class="min-h-screen text-slate-800">
@@ -148,9 +146,9 @@
         
         <h2 class="text-3xl md:text-5xl font-black text-slate-900 mt-4 md:mt-6 mb-3 md:mb-4">Admin Dashboard</h2>
         
-        <p class="text-slate-600 text-base md:text-lg max-w-2xl mb-8 leading-relaxed mx-auto md:mx-0">
-            Welcome back! Monitor your staff movements and college attendance statistics from this central command panel.
-        </p>
+       <p class="text-black font-medium text-base md:text-lg max-w-2xl mb-8 leading-relaxed mx-auto md:mx-0">
+    Welcome back! Monitor your staff movements and college attendance statistics from this central command panel.
+</p>
         
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
           <a href="{{ route('admin.index') }}" class="btn-action btn-primary-glass">
