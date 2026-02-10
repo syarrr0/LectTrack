@@ -15,7 +15,7 @@
   <style>
     body {
         font-family: 'Inter', sans-serif;
-        background-color: #f3f4f6; /* Fallback color */
+        /* background-color: #f3f4f6;  */
         /* Guna gambar yang sama atau gambar cerah */
         background-image: url("{{ asset('images/kvbpSign.jpg') }}"); 
         background-size: cover;
