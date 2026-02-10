@@ -9,42 +9,144 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-</head>
-<body class="min-h-screen">
 
-<header class="fixed top-0 left-0 w-full z-50 px-8 py-4">
-  <div class="max-w-7xl mx-auto flex justify-between items-center">
-    <div class="flex items-center gap-4">
-      <img src="{{ asset('images/logo1_white.png') }}" alt="LectTrack" class="h-10 filter brightness-200">
-      <div class="h-6 w-[1px] bg-white/20"></div>
-      <span class="text-white font-bold tracking-widest text-xs uppercase">Welcome Back Admin</span>
-    </div>
+  <style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f3f4f6; /* Fallback color */
+        /* Guna gambar yang sama atau gambar cerah */
+        background-image: url("{{ asset('images/kvbpSign.jpg') }}"); 
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: relative;
+    }
+
+    /* Overlay Putih (Cerah) - Kurangkan gelap */
+    body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.75); /* Transparency 75% putih */
+        backdrop-filter: blur(4px); /* Blur sikit */
+        z-index: -1;
+    }
+
+    /* Card Glass Effect untuk Light Mode */
+    .stat-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+    }
     
-    <div class="flex items-center gap-3">
-      <a href="{{ route('admin.notifications.index') }}" class="bg-blue-500/20 hover:bg-blue-600 border border-blue-500/50 text-blue-100 hover:text-white px-5 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
-        <i data-lucide="bell-ring" class="w-4 h-4"></i> Manage Notifications
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-color: #3b82f6;
+    }
+
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .stat-label {
+        color: #64748b; /* Slate 500 */
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+        color: #1e293b; /* Slate 800 */
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 4px;
+    }
+
+    /* Button Styles */
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-primary-glass {
+        background: #2563eb;
+        color: white;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    .btn-primary-glass:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-glass {
+        background: white;
+        border: 2px solid #e2e8f0;
+        color: #475569;
+    }
+    .btn-outline-glass:hover {
+        border-color: #cbd5e1;
+        background: #f8fafc;
+        transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800">
+
+<header class="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-3 bg-white/80 backdrop-blur-md border-b border-white/50 shadow-sm transition-all duration-300">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
+    
+    <div class="flex items-center gap-4">
+        <img src="{{ asset('images/logo1.png') }}" alt="LectTrack" class="h-8 md:h-10"> 
+        </div>
+    
+    <div class="flex items-center gap-2 md:gap-3 w-full md:w-auto justify-center md:justify-end">
+      <a href="{{ route('admin.notifications.index') }}" class="flex-1 md:flex-none justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+        <i data-lucide="bell-ring" class="w-4 h-4"></i> 
+        <span class="hidden sm:inline">Notifications</span>
       </a>
 
-      <button onclick="confirmLogout()" class="bg-red-500/20 hover:bg-red-500 border border-red-500/50 text-red-200 hover:text-white px-5 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
-        <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+      <button onclick="confirmLogout()" class="flex-1 md:flex-none justify-center bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+        <i data-lucide="log-out" class="w-4 h-4"></i> 
+        <span class="hidden sm:inline">Sign Out</span>
+        <span class="inline sm:hidden">Exit</span>
       </button>
     </div>
   </div>
 </header>
 
-<main class="pt-32 pb-20 px-8">
+<main class="pt-36 pb-20 px-4 md:px-8">
   
-  <section class="max-w-7xl mx-auto mb-12">
+  <section class="max-w-7xl mx-auto mb-10 md:mb-12 text-center md:text-left">
     <div class="welcome-box">
       <div class="relative z-10">
-        <span class="bg-blue-500/20 text-blue-300 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-blue-500/30">System Active</span>
-        <h2 class="text-5xl font-black text-white mt-6 mb-4">Admin Dashboard</h2>
-        <p class="text-slate-300 text-lg max-w-2xl mb-10 leading-relaxed">
+        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-lg shadow-blue-500/30">System Active</span>
+        
+        <h2 class="text-3xl md:text-5xl font-black text-slate-900 mt-4 md:mt-6 mb-3 md:mb-4">Admin Dashboard</h2>
+        
+        <p class="text-slate-600 text-base md:text-lg max-w-2xl mb-8 leading-relaxed mx-auto md:mx-0">
             Welcome back! Monitor your staff movements and college attendance statistics from this central command panel.
         </p>
         
-        <div class="flex flex-wrap gap-5">
+        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
           <a href="{{ route('admin.index') }}" class="btn-action btn-primary-glass">
             <i data-lucide="users-round" class="w-5 h-5"></i>
             Lecturer List
@@ -58,79 +160,85 @@
     </div>
   </section>
 
- <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <a href="{{ route('admin.index') }}" class="stat-card block hover:shadow-lg transition-shadow">
+  <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
+    
+    <a href="{{ route('admin.index') }}" class="stat-card block hover:ring-2 hover:ring-blue-400 cursor-pointer">
         <div class="icon-box bg-blue-100 text-blue-600"><i data-lucide="users"></i></div>
         <p class="stat-label">Total Staff Record</p>
         <p class="stat-value counter" data-target="{{ $totalLecturers }}">0</p>
     </a>
 
-<a href="{{ route('admin.in_college.list') }}" class="stat-card block">
-    <div class="icon-box bg-green-100 text-green-600"><i data-lucide="map-pin"></i></div>
-    <p class="stat-label">In College Today</p>
-    <p class="stat-value counter" data-target="{{ $inCollege }}">0</p>
-</a>
+    <a href="{{ route('admin.in_college.list') }}" class="stat-card block hover:ring-2 hover:ring-green-400 cursor-pointer">
+        <div class="icon-box bg-green-100 text-green-600"><i data-lucide="map-pin"></i></div>
+        <p class="stat-label">In College Today</p>
+        <p class="stat-value counter" data-target="{{ $inCollege }}">0</p>
+    </a>
 
-   <a href="{{ route('admin.leave_list') }}" class="stat-card group hover:scale-105 transition-transform cursor-pointer">
+    <a href="{{ route('admin.leave_list') }}" class="stat-card block hover:ring-2 hover:ring-red-400 cursor-pointer">
         <div class="icon-box bg-red-100 text-red-600"><i data-lucide="calendar-off"></i></div>
         <p class="stat-label">On Leave Today</p>
         <p class="stat-value counter" data-target="{{ $sickLeave }}">0</p>
     </a>
 
-<a href="{{ route('admin.duty_list') }}" class="stat-card group hover:scale-[1.02] transition-all cursor-pointer block">
-    <div class="icon-box bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-        <i data-lucide="briefcase"></i>
-    </div>
-    <p class="stat-label">Official Duty Today</p>
-    <p class="stat-value counter text-indigo-600" data-target="{{ $outsideDuty ?? 0 }}">0</p>
-</a>
+    <a href="{{ route('admin.duty_list') }}" class="stat-card block hover:ring-2 hover:ring-indigo-400 cursor-pointer">
+        <div class="icon-box bg-indigo-100 text-indigo-600">
+            <i data-lucide="briefcase"></i>
+        </div>
+        <p class="stat-label">Official Duty Today</p>
+        <p class="stat-value counter text-indigo-600" data-target="{{ $outsideDuty ?? 0 }}">0</p>
+    </a>
     
-</section>
+  </section>
 </main>
 
-<footer class="w-full bg-white/90 backdrop-blur-md mt-10">
-    <div class="max-w-7xl mx-auto px-8 py-10 flex flex-col md:flex-row justify-between items-center">
-        <div class="flex items-center gap-4">
-            <img src="{{ asset('images/logo1.png') }}" class="h-8">
-            <p class="text-sm font-semibold text-slate-600">© 2025 LectTrack. High-Performance Management System.</p>
+<footer class="w-full bg-white/60 backdrop-blur-md border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('images/logo1.png') }}" class="h-6 md:h-8 opacity-80">
+            <p class="text-xs md:text-sm font-semibold text-slate-500">© 2025 LectTrack System.</p>
         </div>
         
-        <div class="text-slate-400 text-xs font-medium mt-4 md:mt-0">
-            System Version 2.0.4
+        <div class="text-slate-400 text-[10px] md:text-xs font-medium">
+            Version 2.0.4
         </div>
     </div>
 </footer>
 
 <script>
+  // Initialize Icons
   lucide.createIcons();
   
-  // Animation Counter
+  // Animation Counter Logic
   document.querySelectorAll('.counter').forEach(counter => {
     const target = +counter.getAttribute('data-target');
     const updateCount = () => {
       const current = +counter.innerText;
-      const increment = Math.max(1, target / 30);
+      // Laju sikit animation
+      const increment = Math.max(1, Math.ceil(target / 20)); 
       if(current < target) {
-        counter.innerText = Math.ceil(current + increment);
-        setTimeout(updateCount, 40);
+        counter.innerText = current + increment;
+        setTimeout(updateCount, 30);
       } else { counter.innerText = target; }
     };
     updateCount();
   });
 
+  // Logout Confirmation SweetAlert
   function confirmLogout() {
     Swal.fire({
         title: 'Sign Out?',
-        text: "Ending your administrative session now?",
+        text: "End your session now?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#2563eb',
-        cancelButtonColor: '#1e293b',
+        cancelButtonColor: '#94a3b8',
         confirmButtonText: 'Yes, Logout',
-        background: '#1e293b',
-        color: '#fff'
+        // Tukar tema alert jadi cerah
+        background: '#ffffff',
+        color: '#1e293b' 
     }).then((result) => {
         if (result.isConfirmed) {
+            // Create form dynamicaaly
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = "{{ route('logout') }}";
@@ -140,54 +248,73 @@
         }
     });
   }
+
+  /* --- SOUND NOTIFICATION LOGIC --- */
   const sound = new Audio("{{ asset('sounds/notify.wav') }}");
+  let audioUnlocked = false;
 
-let lastData = {
-  totalLecturers: {{ $totalLecturers }},
-  inCollege: {{ $inCollege }},
-  sickLeave: {{ $sickLeave }},
-  outsideDuty: {{ $outsideDuty }},
-};
+  // Browser moden block sound autoplay. Kita unlock bila user klik apa-apa 1 kali.
+  document.body.addEventListener('click', function() {
+      if (!audioUnlocked) {
+          sound.play().then(() => {
+              sound.pause();
+              sound.currentTime = 0;
+          }).catch(e => {}); // Ignore error kalau kosong
+          audioUnlocked = true;
+      }
+  }, { once: true });
 
-function updateCounter(element, newValue) {
-  const current = parseInt(element.innerText);
-  const increment = Math.max(1, Math.floor((newValue - current) / 20));
+  let lastData = {
+    totalLecturers: {{ $totalLecturers }},
+    inCollege: {{ $inCollege }},
+    sickLeave: {{ $sickLeave }},
+    outsideDuty: {{ $outsideDuty ?? 0 }},
+  };
 
-  if (current < newValue) {
-    element.innerText = current + increment;
-    setTimeout(() => updateCounter(element, newValue), 50);
-  } else {
+  function updateCounterRealtime(element, newValue) {
     element.innerText = newValue;
+    // Boleh tambah highlight effect kalau nak
+    element.classList.add('text-blue-600'); 
+    setTimeout(() => element.classList.remove('text-blue-600'), 1000);
   }
-}
 
-setInterval(() => {
-  fetch('/admin/dashboard/realtime')
-    .then(res => res.json())
-    .then(data => {
+  // Poll data setiap 5 saat
+  setInterval(() => {
+    // Pastikan route ni wujud dalam web.php
+    fetch('/admin/dashboard/realtime')
+      .then(res => {
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.json();
+      })
+      .then(data => {
+        let hasNewData = false;
 
-      let hasNewData = false;
-
-      for (let key in data) {
-        if (data[key] > lastData[key]) {
-          hasNewData = true;
+        // Compare data
+        for (let key in data) {
+          if (data[key] > lastData[key]) {
+            hasNewData = true;
+          }
         }
-      }
 
-      if (hasNewData) {
-        sound.play(); // 🔔 BUNYI TING
-      }
+        // Kalau ada perubahan, bunyikan loceng
+        if (hasNewData && audioUnlocked) {
+          sound.play().catch(error => console.log('Audio blocked:', error));
+        }
 
-      document.querySelectorAll('.counter').forEach(el => {
-        const label = el.previousElementSibling.innerText;
-        if (label === 'Total Lecturers') updateCounter(el, data.totalLecturers);
-        if (label === 'In College') updateCounter(el, data.inCollege);
-        if (label === 'On Leave') updateCounter(el, data.sickLeave);
-        if (label === 'Outside Duty') updateCounter(el, data.outsideDuty);
-      });
-      lastData = data;
-    });
-}, 5000);
+        // Update DOM
+        document.querySelectorAll('.counter').forEach(el => {
+          const label = el.previousElementSibling.innerText;
+          // Pastikan label match dengan HTML di atas
+          if (label === 'TOTAL STAFF RECORD') updateCounterRealtime(el, data.totalLecturers);
+          if (label === 'IN COLLEGE TODAY') updateCounterRealtime(el, data.inCollege);
+          if (label === 'ON LEAVE TODAY') updateCounterRealtime(el, data.sickLeave);
+          if (label === 'OFFICIAL DUTY TODAY') updateCounterRealtime(el, data.outsideDuty);
+        });
+
+        lastData = data;
+      })
+      .catch(err => console.error('Error fetching realtime data:', err));
+  }, 5000); // 5 saat
 </script>
 </body>
 </html>
