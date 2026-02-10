@@ -189,7 +189,7 @@
             <i data-lucide="briefcase"></i>
         </div>
         <p class="stat-label">Official Duty Today</p>
-        <p class="stat-value counter text-indigo-600" data-target="{{ $outsideDuty ?? 0 }}">0</p>
+        <p class="stat-value counter" data-target="{{ $outsideDuty ?? 0 }}">0</p>
     </a>
     
   </section>
