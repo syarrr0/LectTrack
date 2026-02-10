@@ -18,7 +18,7 @@
     <div class="brand-section">
       <img src="{{ asset('images/logo1.png') }}" alt="Logo KV" class="kv-logo" data-aos="fade-down" data-aos-delay="200">
       <div class="brand-divider" data-aos="stretch"></div>
-      <h1 data-aos="fade-up" data-aos-delay="400">Welcome</h1>
+      <h1 data-aos="fade-up" data-aos-delay="400">WELCOME</h1>
     </div>
 
     <p class="subtitle" data-aos="fade-up" data-aos-delay="500">
