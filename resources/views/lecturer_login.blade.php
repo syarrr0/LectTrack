@@ -256,7 +256,7 @@
                 <img src="{{ asset('images/logo1_white.png') }}">
             </div>
 
-            <h1>WELCOME</h1>
+            <h1>WELCOMES</h1>
             <div id="animatedText"></div>
        
                 <a href="{{ url('/') }}" class="btn btn-home" style="color:white;">
