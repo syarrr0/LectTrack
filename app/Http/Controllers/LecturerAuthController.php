@@ -48,7 +48,7 @@ class LecturerAuthController extends Controller
 
     // 3. Jika dua-dua tak jumpa
     return back()->withErrors([
-        'login_error' => 'Nama atau Kata Laluan salah!',
+        'login_error' => 'Username and Password Invalid',
     ])->withInput();
 }
     public function dashboard(Request $request)
@@ -81,9 +81,9 @@ class LecturerAuthController extends Controller
         $deleted = \DB::table('lecturers')->where('id', $id)->delete();
 
         if ($deleted) {
-            return redirect()->back()->with('success', 'Pensyarah berjaya dipadam.');
+            return redirect()->back()->with('success', 'Successfully deleted data.');
         } else {
-            return redirect()->back()->with('error', 'Gagal memadam data.');
+            return redirect()->back()->with('error', 'Failed to delete data.');
         }
     }
 }
