@@ -107,6 +107,10 @@
         background: #f8fafc;
         transform: translateY(-2px);
     }
+
+    p{
+      color:black;
+    }
   </style>
 </head>
 <body class="min-h-screen text-slate-800">
