@@ -29,7 +29,7 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: rgba(255, 255, 255, 0.44); /* Transparency 75% putih */
+        background: rgba(255, 255, 255, 0.29); /* Transparency 75% putih */
         backdrop-filter: blur(4px); /* Blur sikit */
         z-index: -1;
     }
