@@ -256,7 +256,7 @@
                 <img src="{{ asset('images/logo1_white.png') }}">
             </div>
 
-            <h1>WELCOMES</h1>
+            <h1>WELCOMEeeeeeee</h1>
             <div id="animatedText"></div>
        
                 <a href="{{ url('/') }}" class="btn btn-home" style="color:white;">
@@ -269,7 +269,7 @@
     <!-- RIGHT SIDE -->
     <div class="right">
 
-        <h2>Log In Adamm</h2>
+        <h2>Log In</h2>
         <small>Welcome back, please log in first</small>
 
 <form method="POST" action="{{ route('lecturer.login.submit') }}">
