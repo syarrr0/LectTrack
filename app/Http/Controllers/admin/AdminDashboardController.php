@@ -33,7 +33,7 @@ class AdminDashboardController extends Controller
 
         // Kira unik lecturer_id untuk Tugas Rasmi
        $outsideDuty = DB::table('attendances')
-            ->whereDate('date', $today)
+            ->whereDate('date_submit', $today)
             ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
             ->count();
 
