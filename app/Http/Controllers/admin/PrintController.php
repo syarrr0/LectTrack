@@ -9,43 +9,32 @@ use Carbon\Carbon;
 
 class PrintController extends Controller
 {
-    /**
-     * Fetches all lecturer and attendance data and passes it to the print view.
-     * The view is styled to be an A4 PDF template.
-     *
-     * @param int $id Lecturer ID
-     * @return \Illuminate\View\View
-     */
     public function printReport($id)
     {
-        // ----------------------------------------------------
         // 1. FETCH LECTURER PROFILE DATA
-        // ----------------------------------------------------
-        $lecturer = DB::table('lecturers')
-                        ->where('id', $id)
-                        ->first();
+        $lecturer = DB::table('lecturers')->where('id', $id)->first();
 
         if (!$lecturer) {
             abort(404, 'Lecturer not found.');
         }
 
-        // ----------------------------------------------------
         // 2. FETCH AND CALCULATE ATTENDANCE DATA (Last 1 Year)
-        // ----------------------------------------------------
-        
         $endDate = Carbon::now();
         $startDate = $endDate->copy()->subYear(); 
         
-        // Fetch all attendance records for the lecturer within the period
         $attendanceRecords = DB::table('attendances')
                                 ->where('lecturer_id', $id)
                                 ->whereBetween('date_submit', [$startDate, $endDate])
-                                ->orderBy('date_submit', 'asc') // Sort for clear reporting
+                                ->orderBy('date_submit', 'asc')
                                 ->get();
         
-        // Status calculations (Same logic as LaporanController)
+        // Inisialisasi pembilang untuk cuti baru
+        $total_leave_days = 0; 
+        
         $statusDays = [
             'CUTI(MC)' => 0,
+            'CUTI REHAT KHAS (CRK)' => 0,
+            'CUTI TANPA REKOD (CTR)' => 0,
             'PROGRAM' => 0,
             'MESYUARAT' => 0,
             'KURSUS/BENGKEL' => 0,
@@ -58,7 +47,18 @@ class PrintController extends Controller
             $days = $submit->diffInDays($end) + 1; 
 
             $selection = strtoupper($record->selection);
-            if (array_key_exists($selection, $statusDays)) {
+
+            // Logik baru: Semak jika pilihan mengandungi kata kunci cuti
+            if (str_contains($selection, 'CUTI SAKIT') || str_contains($selection, 'MC')) {
+                $statusDays['CUTI(MC)'] += $days;
+                $total_leave_days += $days;
+            } elseif (str_contains($selection, 'CRK') || str_contains($selection, 'REHAT KHAS')) {
+                $statusDays['CUTI REHAT KHAS (CRK)'] += $days;
+                $total_leave_days += $days;
+            } elseif (str_contains($selection, 'CTR') || str_contains($selection, 'TANPA REKOD')) {
+                $statusDays['CUTI TANPA REKOD (CTR)'] += $days;
+                $total_leave_days += $days;
+            } elseif (array_key_exists($selection, $statusDays)) {
                 $statusDays[$selection] += $days;
             } else {
                 $statusDays['OTHERS'] += $days; 
@@ -68,27 +68,23 @@ class PrintController extends Controller
         $total_days_in_period = $startDate->diffInDays($endDate); 
         $total_days_status = array_sum($statusDays); 
 
-        // Estimated Days In-College Duty
         $days_in_college = max(0, $total_days_in_period - $total_days_status); 
 
         // Calculation for summary statistics
-        $days_off_mc = $statusDays['CUTI(MC)']; 
-        $days_annual_leave = 0; // Based on your DB, annual leave is not explicitly tracked separately.
+        // Sekarang $days_off_leave merangkumi MC + CRK + CTR
+        $days_off_leave = $total_leave_days; 
         $percentage_present = round(($days_in_college / $total_days_in_period) * 100, 1);
         
-        // ----------------------------------------------------
         // 3. PASS DATA TO VIEW
-        // ----------------------------------------------------
-
         return view('admin.print', compact( 
             'lecturer', 
-            'attendanceRecords', // New: Pass raw records for the table
+            'attendanceRecords', 
             'percentage_present',
-            'days_annual_leave', 
             'total_days_in_period',
-            'days_off_mc',
+            'days_off_leave', // Hantar data cuti yang telah digabungkan
             'startDate',
-            'endDate'
+            'endDate',
+            'statusDays' // Hantar jika anda mahu papar pecahan di blade
         ));
     }
 }
