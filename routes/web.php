@@ -142,7 +142,7 @@ Route::get('/lecturer/report/{id}', [LaporanController::class, 'showReport'])
 
 
 
-Route::get('/lecturer/print/{id}', [\App\Http\Controllers\Admin\PrintController::class, 'printReport']);
+Route::get('/lecturer/print/{id}', [\App\Http\Controllers\admin\PrintController::class, 'printReport']);
 
 // log out admin
 Route::post('/logout', function (Request $request) {
