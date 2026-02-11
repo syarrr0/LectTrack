@@ -72,7 +72,7 @@ class PrintController extends Controller
         $days_in_college = max(0, $total_days_in_period - $total_days_status); 
 
         // Calculation for summary statistics
-        $days_off_mc = $statusDays['CUTI(MC)']; 
+        $days_off_mc = $statusDays['CUTI']; 
         $days_annual_leave = 0; // Based on your DB, annual leave is not explicitly tracked separately.
         $percentage_present = round(($days_in_college / $total_days_in_period) * 100, 1);
         

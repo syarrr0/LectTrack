@@ -192,7 +192,7 @@
                 <img src="{{ asset('images/logo1.png') }}" alt="LectTrack Logo">
             </div>
             <div class="report-title">
-                <h1>LECTURER PERFORMANCE REPORT</h1>
+                <h1>LECTURER ACTIVITY REPORT</h1>
                 <p>Period: {{ $startDate->format('d M Y') }} to {{ $endDate->format('d M Y') }}</p>
             </div>
         </div>
