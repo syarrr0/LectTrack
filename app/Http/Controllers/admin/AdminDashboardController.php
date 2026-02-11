@@ -14,12 +14,13 @@ class AdminDashboardController extends Controller
     private $leaveTypes = ['%Cuti Sakit (MC)%', '%Cuti Rehat Khas (CRK)%', '%Cuti Tanpa Rekod (CTR)%'];
     private $dutyTypes = ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'];
 
-   public function dashboard()
+    public function dashboard()
     {
         $today = Carbon::today();
+        
         $totalLecturers = Lecturer::count(); 
 
-        // 1. Kira Cuti (Range Logic)
+        // Kira unik lecturer_id untuk Cuti
         $sickLeave = Attendance::whereDate('date_submit', '<=', $today)
             ->whereDate('date_end', '>=', $today)
             ->where(function($q) {
@@ -30,16 +31,17 @@ class AdminDashboardController extends Controller
             ->distinct('lecturer_id')
             ->count('lecturer_id');
 
-        // 2. Kira Official Duty (Range Logic - MESTI SAMA DENGAN DUTYLIST)
-        $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', $this->dutyTypes)
-            ->distinct('lecturer_id')
-            ->count('lecturer_id');
+        // Kira unik lecturer_id untuk Tugas Rasmi
+       $outsideDuty = \DB::table('attendances')
+        ->whereDate('date_submit', $today)
+        ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
+        ->distinct('lecturer_id') 
+        ->count('lecturer_id');
 
-        $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
+             $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
 
-        return view('admin.dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
+         return view('admin.dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
+    
     }
 
     public function getRealtimeData()
@@ -72,29 +74,25 @@ class AdminDashboardController extends Controller
     }
 
    public function dutyList()
-    {
-        $today = Carbon::today();
+{
+    $today = \Carbon\Carbon::today();
 
-        // Ambil SEMUA rekod yang aktif harini (Range Logic)
-        $dutyRecords = Attendance::with('lecturer')
-            ->whereHas('lecturer') 
-            ->whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', $this->dutyTypes)
-            ->get()
-            ->unique('lecturer_id'); // Pastikan 1 orang 1 rekod
+    // 1. Ambil rekod tugasan rasmi hari ini
+    $dutyRecords = \App\Models\Attendance::with('lecturer')
+        ->whereHas('lecturer') 
+        ->whereDate('date_submit', '<=', $today)
+        ->whereDate('date_end', '>=', $today)
+        ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
+        ->get()
+        ->unique('lecturer_id'); // Pastikan 1 orang 1 nama sahaja
 
-        // Group data untuk dipaparkan mengikut jabatan di Blade
-        $lecturersOnDuty = $dutyRecords->map(function($attendance) {
-            // Kita attach kan info attendance ke dalam object lecturer supaya boleh display kat blade
-            $attendance->lecturer->current_selection = $attendance->selection;
-            $attendance->lecturer->current_location = $attendance->location;
-            $attendance->lecturer->current_remarks = $attendance->remarks;
-            return $attendance->lecturer;
-        })->groupBy('department');
+    // 2. Group ikut 'jabatan' (bukan department)
+    $lecturersOnDuty = $dutyRecords->map(function($attendance) {
+        return $attendance->lecturer;
+    })->groupBy('department');
 
-        return view('admin.duty_list', compact('lecturersOnDuty'));
-    }
+    return view('admin.duty_list', compact('lecturersOnDuty'));
+}
 
     public function leaveList()
     {
