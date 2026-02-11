@@ -15,8 +15,8 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\IndexadminController;
 use App\Http\Controllers\AIChatController;
 use App\Http\Controllers\admin\AdminDashboardController;
-use App\Http\Controllers\Admin\LaporanController;
-use App\Http\Controllers\Admin\PrintController;
+use App\Http\Controllers\admin\LaporanController;
+use App\Http\Controllers\admin\PrintController;
 use App\Http\Controllers\PasswordController;
 
 // =============================
