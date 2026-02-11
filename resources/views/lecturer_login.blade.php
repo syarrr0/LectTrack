@@ -388,10 +388,10 @@
 
             <button type="submit" class="btn-login">Log In</button>
 
-            <p class="signup-link">
+            <!-- <p class="signup-link">
                 Don't have an account? 
                 <a href="{{ url('signup') }}">Sign Up</a>
-            </p>
+            </p> -->
 
         </form>
     </div>
