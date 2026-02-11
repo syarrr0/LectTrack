@@ -168,7 +168,7 @@
     
     <a href="{{ route('admin.index') }}" class="stat-card block hover:ring-2 hover:ring-blue-400 cursor-pointer">
         <div class="icon-box bg-blue-100 text-blue-600"><i data-lucide="users"></i></div>
-        <p class="stat-label">Total Staff Record</p>
+        <p class="stat-label">Total Lecturers</p>
         <p class="stat-value counter" data-target="{{ $totalLecturers }}">0</p>
     </a>
 
@@ -184,13 +184,13 @@
         <p class="stat-value counter" data-target="{{ $sickLeave }}">0</p>
     </a>
 
-    <a href="{{ route('admin.duty_list') }}" class="stat-card block hover:ring-2 hover:ring-indigo-400 cursor-pointer">
-        <div class="icon-box bg-indigo-100 text-indigo-600">
-            <i data-lucide="briefcase"></i>
-        </div>
-        <p class="stat-label">Official Duty Today</p>
-        <p class="stat-value counter" data-target="{{ $outsideDuty ?? 0 }}">0</p>
-    </a>
+<a href="{{ route('admin.duty_list') }}" class="stat-card group cursor-pointer">
+    <div class="icon-box bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+        <i data-lucide="briefcase"></i>
+    </div>
+    <p class="stat-label">Official Duty Today</p>
+    <p class="stat-value counter" data-target="{{ $outsideDuty ?? 0 }}">0</p>
+</a>
     
   </section>
 </main>

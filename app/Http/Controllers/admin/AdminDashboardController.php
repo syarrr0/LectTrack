@@ -32,15 +32,12 @@ class AdminDashboardController extends Controller
             ->count('lecturer_id');
 
         // Kira unik lecturer_id untuk Tugas Rasmi
-        $outsideDuty = Attendance::whereDate('date_submit', '<=', $today)
-            ->whereDate('date_end', '>=', $today)
-            ->whereIn('selection', $this->dutyTypes)
-            ->distinct('lecturer_id')
-            ->count('lecturer_id');
+       $outsideDuty = DB::table('attendances')
+            ->whereDate('date', $today)
+            ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
+            ->count();
 
-        $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
-
-        return view('admin.dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
+        return view('dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
     }
 
     public function getRealtimeData()
