@@ -37,7 +37,10 @@ class AdminDashboardController extends Controller
             ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
             ->count();
 
-        return view('admin.dashboard', compact('totalLecturers', 'totalLecturers', 'sickLeave', 'outsideDuty'));
+             $inCollege = max(0, $totalLecturers - ($sickLeave + $outsideDuty));
+
+         return view('admin.dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
+    
     }
 
     public function getRealtimeData()
