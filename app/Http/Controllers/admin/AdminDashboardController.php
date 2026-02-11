@@ -37,7 +37,7 @@ class AdminDashboardController extends Controller
             ->whereIn('selection', ['MESYUARAT', 'PROGRAM', 'KURSUS/BENGKEL'])
             ->count();
 
-        return view('dashboard', compact('totalLecturers', 'inCollege', 'sickLeave', 'outsideDuty'));
+        return view('dashboard', compact('totalLecturers', 'totalLecturers', 'sickLeave', 'outsideDuty'));
     }
 
     public function getRealtimeData()
