@@ -81,8 +81,9 @@ return view('admin.print', compact(
     'attendanceRecords', 
     'percentage_present',
     'total_days_in_period',
+    'days_off_leave', // Pastikan nama ini ada di sini
     'startDate',
     'endDate'
-))->with('days_off_mc', $days_off_leave);
+));
     }
 }

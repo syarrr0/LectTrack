@@ -219,21 +219,25 @@
             </div>
         </div>
 
-        <h2>Summary Statistics (Total {{ $total_days_in_period }} Days)</h2>
-        <div class="summary-box">
-            <div class="summary-item">
-                <div class="summary-value">{{ $percentage_present }}%</div>
-                <div class="summary-label">In-College Attendance</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">{{ round(($days_off_mc / $total_days_in_period) * 100, 1) }}%</div>
-                <div class="summary-label">Medical Leave (MC) Percentage</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">{{ $days_annual_leave }}</div>
-                <div class="summary-label">Annual Leave Taken (Days)</div>
-            </div>
+<h2>Summary Statistics (Total {{ $total_days_in_period }} Days)</h2>
+<div class="summary-box">
+    <div class="summary-item">
+        <div class="summary-value">{{ $percentage_present }}%</div>
+        <div class="summary-label">In-College Attendance</div>
+    </div>
+    
+    <div class="summary-item">
+        <div class="summary-value">
+            {{ $total_days_in_period > 0 ? round(($days_off_leave / $total_days_in_period) * 100, 1) : 0 }}%
         </div>
+        <div class="summary-label">Total Leave Percentage (MC/CRK/CTR)</div>
+    </div>
+
+    <div class="summary-item">
+        <div class="summary-value">{{ $days_off_leave }}</div>
+        <div class="summary-label">Total Leave (Days)</div>
+    </div>
+</div>
 
         <h2>Detailed Absence/Off-Campus Records</h2>
         <div class="attendance-table">
