@@ -76,15 +76,13 @@ class PrintController extends Controller
         $percentage_present = round(($days_in_college / $total_days_in_period) * 100, 1);
         
         // 3. PASS DATA TO VIEW
-        return view('admin.print', compact( 
-            'lecturer', 
-            'attendanceRecords', 
-            'percentage_present',
-            'total_days_in_period',
-            'days_off_leave', // Hantar data cuti yang telah digabungkan
-            'startDate',
-            'endDate',
-            'statusDays' // Hantar jika anda mahu papar pecahan di blade
-        ));
+return view('admin.print', compact( 
+    'lecturer', 
+    'attendanceRecords', 
+    'percentage_present',
+    'total_days_in_period',
+    'startDate',
+    'endDate'
+))->with('days_off_mc', $days_off_leave);
     }
 }
